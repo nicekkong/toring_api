@@ -2,7 +2,14 @@ spring:
   profiles:
     active: local # 기본 환경 선택
 
-login.url.patterns:
-  - /metor/contents/create
-  - /mentor/contents/modify
-  - /mentor/contetns/delete
+env:
+  servers:
+    dev1.example.com,dev2.example.com,dev3.example.com
+
+
+
+my:
+  email: nicekkong@gmail.com
+
+
+number: 100

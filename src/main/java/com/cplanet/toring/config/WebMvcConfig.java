@@ -1,6 +1,7 @@
 package com.cplanet.toring.config;
 
 import com.cplanet.toring.interceptor.LoginValidateInterceptor;
+import com.cplanet.toring.interceptor.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -14,9 +15,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private LoginValidateInterceptor loginValidateInterceptor;
+    private RequestInterceptor requestInterceptor;
 
-    public WebMvcConfig(LoginValidateInterceptor loginValidateInterceptor) {
+    public WebMvcConfig(LoginValidateInterceptor loginValidateInterceptor,
+                        RequestInterceptor requestInterceptor
+                        ) {
         this.loginValidateInterceptor = loginValidateInterceptor;
+        this.requestInterceptor = requestInterceptor;
     }
 
     // 로그인 세션 체크를 위한 interceptor
@@ -26,6 +31,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 // TODO : 로그인 없이 접근 가능한 URL 설정
                 .excludePathPatterns("NO_LOGIN_URLS_PATTERN");
+
+        // 로그 출력용
+        registry.addInterceptor(requestInterceptor).addPathPatterns("/**");
+
     }
 
     @Bean

@@ -35,7 +35,7 @@ spring:
 
 logging:
   config: classpath:${spring.profiles}/logback.xml
-  level.org.hibernate.type.descriptor.sql: trace
+#  level.org.hibernate.type.descriptor.sql: trace
 
 
 my:

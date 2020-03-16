@@ -1,9 +1,6 @@
 package com.cplanet.toring.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.cplanet.toring.dto.MaskResponseDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,10 +45,10 @@ public class RestTemplateTest {
         HashMap<String, String> param = new  HashMap<>();
         param.put("address", "서울특별시 서초구 잠원동");
 
-        MaskResponse response = restTemplate.getForObject("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address={address}", MaskResponse.class,  param);
+        MaskResponseDto response = restTemplate.getForObject("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address={address}", MaskResponseDto.class,  param);
         System.out.println(response.toString());
 
-        ResponseEntity<MaskResponse> responseEntity = restTemplate.getForEntity("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address={address}", MaskResponse.class,  param);
+        ResponseEntity<MaskResponseDto> responseEntity = restTemplate.getForEntity("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address={address}", MaskResponseDto.class,  param);
         System.out.println("STATUS CODE => " + responseEntity.getStatusCodeValue() + responseEntity.getStatusCode());
         System.out.println(responseEntity.getBody());
     }
@@ -72,39 +68,21 @@ public class RestTemplateTest {
         System.out.println(email);
         System.out.println(number*2);
         servers.forEach(System.out::println);
-
     }
 
-    @Getter
-    @Setter @ToString
-    static class MaskResponse {
+    @Autowired
+    SampleCacheService sampleCacheService;
 
-        String address;
-        int count;
-        List<Store> stores;
+    @Test
+    public void cacheTest() {
 
-        @Getter @Setter @ToString
-        static class Store {
-
-            String addr;
-            String code;
-            LocalDateTime createdAt;
-            double lat;
-            double lng;
-            String name;
-            @JsonProperty(value ="remain_stat")
-            String remainStat;
-            @JsonProperty(value ="stock_at")
-            String stockAt;
-            String type;
-
-            private void setStockAt(String result) {
-                this.stockAt = "11111111";
-            }
-
-        }
-
-
+        System.out.println(sampleCacheService.getCacheEmail("nicekkong"));
+        System.out.println("========================================");
+        System.out.println(sampleCacheService.getCacheEmail("nicekkong"));
+        System.out.println("========================================");
+        sampleCacheService.cacheEvict("threeMinCache", "nicekkong");
+        System.out.println("========================================");
+        System.out.println(sampleCacheService.getCacheEmail("nicekkong"));
     }
 
 }

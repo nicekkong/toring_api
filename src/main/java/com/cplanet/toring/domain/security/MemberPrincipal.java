@@ -11,10 +11,16 @@ import java.util.List;
 
 public class MemberPrincipal implements UserDetails {
 
-    private final Member user;
+    private final Member member;
 
-    public MemberPrincipal(Member user) {
-        this.user = user;
+    private List<? extends  GrantedAuthority> authorities;
+
+    public MemberPrincipal(Member member) {
+        this.member = member;
+    }
+
+    public static MemberPrincipal create(Member member) {
+        return new MemberPrincipal(member);
     }
 
     @Override
@@ -22,47 +28,48 @@ public class MemberPrincipal implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         // Extract list of permissions (name)
-        this.user.getPermissionList().forEach(p -> {
+        this.member.getPermissionList().forEach(p -> {
             GrantedAuthority authority = new SimpleGrantedAuthority(p);
             authorities.add(authority);
         });
 
         // Extract list of roles (ROLE_name)
-        this.user.getRoleList().forEach(p -> {
-            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + p);
-            authorities.add(authority);
-        });
+        GrantedAuthority authority = new SimpleGrantedAuthority(this.member.getRole().name());
+        authorities.add(authority);
+
 
         return authorities;
     }
 
+    public Long getId() {return this.member.getId();}
+
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return this.member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.user.getEmail();
+        return this.member.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

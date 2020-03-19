@@ -13,3 +13,7 @@ my:
 
 
 number: 100
+
+app:
+  jwtSecret: TORINGTOKEN123
+  jwtExpirationInMs: 10800000 # 1000 * 60 * 60 * 3

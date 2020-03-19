@@ -5,6 +5,7 @@ import com.cplanet.toring.interceptor.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -23,6 +24,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         this.loginValidateInterceptor = loginValidateInterceptor;
         this.requestInterceptor = requestInterceptor;
     }
+
+    private final long MAX_AGE_SECS = 3600;
 
     // 로그인 세션 체크를 위한 interceptor
     @Override
@@ -62,9 +65,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("/");
     }
 
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.setOrder(0);
-//        registry.addViewController("/").setViewName("redirect:/game");
-//    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*")
+                .allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
+    }
 }

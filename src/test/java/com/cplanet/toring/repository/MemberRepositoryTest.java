@@ -2,8 +2,9 @@ package com.cplanet.toring.repository;
 
 
 import com.cplanet.toring.domain.Member;
-import com.cplanet.toring.domain.enums.AccountType;
 import com.cplanet.toring.domain.enums.MemberStatus;
+import com.cplanet.toring.domain.enums.Role;
+import com.cplanet.toring.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,26 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private MemberService memberService;
+
     @Test
     public void memberSaveTest() {
 
         Member member = Member.builder()
                 .email("nicekkong@gmail.com")
-                .password("p@$$w0rd")
+                .password("12345")
                 .mdn("01055557777")
                 .name("공병일")
                 .recentLoginDate(LocalDateTime.now())
                 .agreeTermsVersion("T01")
                 .memberStatus(MemberStatus.OK)
-                .accountType(AccountType.general)
+                .role(Role.USER)
                 .build();
 
-        System.out.println(memberRepository.save(member).getId());
+//        System.out.println(memberRepository.save(member).getId());
+
+        System.out.println(memberService.createMember(member));
 
     }
 

@@ -77,7 +77,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="org.springframework.web" level="ERROR">
+    <logger name="org.springframework.d" level="ERROR">
         <appender-ref ref="STDOUT"/>
     </logger>
 

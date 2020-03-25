@@ -60,7 +60,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/login/**", "/signup/**", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html","/**/*.css", "/**/*.js").permitAll()
 //                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
 //                .antMatchers(HttpMethod.GET, "/", "/api/users/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+            .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+//                .logoutSuccessHandler(customLogoutSuccessHandler)
+                .invalidateHttpSession(true) .deleteCookies("JSESSIONID")
+
+        ;
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

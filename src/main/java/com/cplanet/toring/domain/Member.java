@@ -31,9 +31,9 @@ public class Member extends AuditEntity {
     private String mdn;
     private String name;
 
-//    @Builder.Default
-//    private LocalDateTime recentLoginDate = LocalDateTime.now();
-    private LocalDateTime recentLoginDate;
+    @Builder.Default
+    private LocalDateTime recentLoginDate = LocalDateTime.now();
+//    private LocalDateTime recentLoginDate;
 
     @Builder.Default
     private String agreeTermsVersion = TERM_VER;

@@ -41,6 +41,11 @@ public class MemberPrincipal implements UserDetails {
         return authorities;
     }
 
+    public Member getMember() {
+        this.member.setPassword(null);
+        return this.member;
+    }
+
     public Long getId() {return this.member.getId();}
 
     @Override
@@ -52,6 +57,8 @@ public class MemberPrincipal implements UserDetails {
     public String getUsername() {
         return this.member.getEmail();
     }
+
+    public String getName() {return this.member.getName();}
 
     @Override
     public boolean isAccountNonExpired() {

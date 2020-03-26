@@ -28,7 +28,7 @@ public class TestDataResponseDto {
         this.id = entity.getId();
         this.intData = entity.getIntData();
         this.stringData = entity.getStringData();
-        this.createDate = DateUtils.toStringDateTime(entity.getCreateDate());
-        this.updateDate = DateUtils.toStringDateTime(entity.getUpdateDate());
+        this.createDate = entity.getCreateDate();
+        this.updateDate = entity.getUpdateDate();
     }
 }

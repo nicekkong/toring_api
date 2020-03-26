@@ -1,6 +1,7 @@
 package com.cplanet.toring.domain.common;
 
 
+import com.cplanet.toring.utils.DateUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,5 +23,13 @@ public class AuditEntity {
 
     @LastModifiedDate
     private LocalDateTime updateDate;
+
+    public String getCreateDate() {
+        return DateUtils.toStringYYYYMMDDHHMMSS(this.createDate);
+    }
+
+    public String getUpdateDate() {
+        return DateUtils.toStringYYYYMMDDHHMMSS(this.updateDate);
+    }
 
 }

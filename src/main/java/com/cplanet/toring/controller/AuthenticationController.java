@@ -1,9 +1,10 @@
 package com.cplanet.toring.controller;
 
 
+import com.cplanet.toring.annotation.CurrentUser;
 import com.cplanet.toring.component.JwtTokenProvider;
-import com.cplanet.toring.domain.AuthenticationBean;
 import com.cplanet.toring.domain.Member;
+import com.cplanet.toring.domain.security.MemberPrincipal;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.JwtAuthenticationResponse;
 import com.cplanet.toring.dto.LoginRequestDto;
@@ -56,12 +57,6 @@ public class AuthenticationController {
         this.authenticationService = authenticationServic;
     }
 
-    @GetMapping(path = "/basicauth")
-    public AuthenticationBean auth() {
-
-        return new AuthenticationBean("Login");
-    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
 
@@ -79,13 +74,18 @@ public class AuthenticationController {
         return response;
     }
 
-    @GetMapping(value = "/logout")
-    public ApiResponse logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @GetMapping(value = "/auth/logout")
+    public ApiResponse logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return new ApiResponse(true, "logout success");
+    }
+
+    @GetMapping(value = "/member")
+    public Member sampleMember(@CurrentUser MemberPrincipal member) {
+        return member.getMember();
     }
 
 

@@ -47,14 +47,14 @@ public class AuthenticationController {
                                     PasswordEncoder passwordEncoder,
                                     JwtTokenProvider jwtTokenProvider,
                                     ModelMapper modelMapper,
-                                    AuthenticationService authenticationServic) {
+                                    AuthenticationService authenticationService) {
         this.authenticationManager = authenticationManager;
         this.memberRepository = memberRepository;
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.modelMapper = modelMapper;
-        this.authenticationService = authenticationServic;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/login")

@@ -19,6 +19,5 @@ public class MemberService {
     public Member createMember(Member member) {
         member.encodePassword(passwordEncoder);
         return memberRepository.save(member);
-
     }
 }

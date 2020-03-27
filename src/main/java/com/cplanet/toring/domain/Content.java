@@ -1,12 +1,10 @@
 package com.cplanet.toring.domain;
 
+import com.cplanet.toring.domain.common.AuditEntity;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,23 +15,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Content {
+public class Content extends AuditEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long member_id;
+    private Long memberId;
     private String title;
     private String keyword;
     private Long categorySub1;
     private Long categorySub2;
     private String preview;
     private String content;
-    private String content_tts;
-    private String attatch_meta;
-    private String thumb_image;
-    private String background_image;
+    private String contentTts;
+    private String attatchMeta;
+    private String thumbImage;
+    private String backgroundImage;
     private Float toring;
     private String status;
     private LocalDateTime viewDate;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
 }

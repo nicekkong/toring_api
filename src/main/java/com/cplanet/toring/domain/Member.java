@@ -52,7 +52,6 @@ public class Member extends AuditEntity {
     @Builder.Default
     private String permissions = "";
 
-
     public List<String> getPermissionList() {
         if(this.permissions.length() > 0) {
             return Arrays.asList(this.permissions.split(","));

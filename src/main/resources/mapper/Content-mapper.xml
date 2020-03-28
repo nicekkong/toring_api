@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cplanet.toring.mapper.ContentMapper">
+    <select id="selectMainCategory" parameterType="java.lang.String" resultType="com.cplanet.toring.domain.Category$MainCategory">
+        SELECT  id, name
+        FROM  tr_category_sub1
+    </select>
+    <select id="selectSubCategory" parameterType="java.lang.String" resultType="com.cplanet.toring.domain.Category$SubCategory">
+        SELECT  id, name, category_sub1_id as mainCategoryId
+        FROM  tr_category_sub2
+    </select>
+</mapper>

@@ -54,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                // 인증이 필요한 URL 패턴
-                .antMatchers("/login/**", "/signup/**").permitAll()
+                // 인증이 필요없는 URL 패턴
+                .antMatchers("/login/**", "/signup/**", "/mentoring/**").permitAll()
 //                .antMatchers("/mask/**").permitAll()
 //                .antMatchers("/login/**", "/signup/**", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html","/**/*.css", "/**/*.js").permitAll()
 //                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()

@@ -14,6 +14,12 @@ public class LoginValidateInterceptor extends HandlerInterceptorAdapter {
     static final private Logger logger = LoggerFactory.getLogger(LoginValidateInterceptor.class);
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
+
+
+
+
+
         return true;
     }
 }

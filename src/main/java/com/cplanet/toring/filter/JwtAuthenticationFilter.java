@@ -1,5 +1,6 @@
 package com.cplanet.toring.filter;
 
+import com.cplanet.toring.component.AccessTokenCookie;
 import com.cplanet.toring.component.JwtTokenProvider;
 import com.cplanet.toring.service.security.MemberDetailService;
 import org.slf4j.Logger;
@@ -22,22 +23,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
-
     @Autowired
     private MemberDetailService memberDetailService;
+    @Autowired
+    private AccessTokenCookie accessTokenCookie;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-            logger.info(request.getPathInfo());
-            logger.info(request.getContextPath());
 
         try {
-            String jwt = getJwtFromRequest(request);
+            String jwt = tokenProvider.getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+
+                // 유효한 토큰이면 expire time을 연장한다.
+                response.addCookie(accessTokenCookie.extensionCookie(jwt));
+
                 Long userId = tokenProvider.getMemberIdFromJWT(jwt);
 
                 UserDetails userDetails = memberDetailService.loadUserById(userId);
@@ -50,15 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
-
         filterChain.doFilter(request, response);
     }
 
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
-        }
-        return null;
-    }
+
 }

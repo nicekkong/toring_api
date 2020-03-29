@@ -18,6 +18,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         logger.info("request.getRequestURL() => [" + request.getRequestURL() + "]");
 
+
         return super.preHandle(request, response, handler);
     }
 }

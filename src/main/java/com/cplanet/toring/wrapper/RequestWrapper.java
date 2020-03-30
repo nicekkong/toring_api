@@ -17,6 +17,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
     public String getAccessToken() {
         Cookie[] cookies = getCookies();
         String accessToken = null;
+        if(cookies == null) {
+            return null;
+        }
         for(Cookie c : cookies) {
             if(ACCESS_TOKEN.equals(c.getName())) {
                 accessToken = c.getValue();

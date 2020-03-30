@@ -16,6 +16,9 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    @Value("${spring.profiles}")
+    String profile;
+
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     @Value("${app.jwtSecret}")
@@ -62,21 +65,31 @@ public class JwtTokenProvider {
     }
 
     public String getJwtFromRequest(HttpServletRequest request) {
-//        String bearerToken = request.getHeader("Authorization");
 
+        logger.info("profile ::: {} ", profile);
         String bearerToken = null;
+        if(profile.equals("local")) {
+            // local 환경인 경우는 Header에서 token값을 가져오고,
+            bearerToken = request.getHeader("Authorization");
+            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                bearerToken = bearerToken.substring(7, bearerToken.length());
+            }
 
-        Cookie[] cookies = request.getCookies();
-        for(Cookie c : cookies) {
-            if("access_token".equals(c.getName())) {
-                bearerToken = c.getValue();
-                logger.info("access_token: maxAge = {}", c.getMaxAge());
+        } else {
+            // 서버 환경인 경우 request에서 Cookie를 통해 token을 가져온다.
+            Cookie[] cookies = request.getCookies();
+            if (cookies == null) {
+                return null;
+            }
+
+            for (Cookie c : cookies) {
+                if ("access_token".equals(c.getName())) {
+                    bearerToken = c.getValue();
+                }
             }
         }
+        logger.info("bearerToken ::: {}", bearerToken);
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            bearerToken = bearerToken.substring(7, bearerToken.length());
-        }
         return bearerToken;
     }
 }

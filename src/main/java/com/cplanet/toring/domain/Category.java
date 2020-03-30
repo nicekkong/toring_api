@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class Category {
-    List<MainCategory> maincategory;
+    List<MainCategory> mainCategory;
     List<SubCategory> subCategory;
 
     @Data

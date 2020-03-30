@@ -37,7 +37,7 @@ public class MentoringService {
 
     public Category getToringCategories() {
         Category categoryInfo = new Category();
-        categoryInfo.setMaincategory(contentMapper.selectMainCategory());
+        categoryInfo.setMainCategory(contentMapper.selectMainCategory());
         categoryInfo.setSubCategory(contentMapper.selectSubCategory());
         return categoryInfo;
     }

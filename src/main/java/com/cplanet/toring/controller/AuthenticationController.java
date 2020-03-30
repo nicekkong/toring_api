@@ -15,15 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
+@RequestMapping(value = "/api")
 public class AuthenticationController  extends BaseController {
 
     final private ModelMapper modelMapper;
@@ -52,6 +52,8 @@ public class AuthenticationController  extends BaseController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
 
+        Map<String, Object> result = new HashMap<>();
+
         String email = signUpRequest.getEmail();
         String password = signUpRequest.getPassword();
 
@@ -62,8 +64,23 @@ public class AuthenticationController  extends BaseController {
         if(signUpMember.getSuccess()) {
             String jwt = authenticationService.makeLoginToken(email, password);
             response.addCookie(accessTokenCookie.createAccessToken(jwt));
+            result.put("access_token", jwt);
+
+
+//            response.addHeader("Content-Type", "application/json;charset=UTF-8");
+//            response.addHeader("Access-Control-Allow-Credentials", "true");
+//            response.addHeader("Access-Control-Allow-Origin", "local.nicekkong2.com");
+//            response.addHeader("Access-Control-Allow-Headers",
+//                    "Origin, X-Requested-With, Content-Type, Accept");
+
         }
-        return new ResponseEntity(signUpMember, signUpMember.getSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+
+
+        result.put("success", signUpMember.getSuccess());
+        result.put("message", signUpMember.getMessage());
+
+
+        return new ResponseEntity(result, signUpMember.getSuccess()? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 
     }
 

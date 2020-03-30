@@ -2,7 +2,7 @@
 
 <configuration>
 
-    <property name="LOG_HOME" value="/Users/nicekkong/Desktop/intellij_workspace/logs/toring_api" />
+    <property name="LOG_HOME" value="/usr/share/tomcat8.5/logs" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -69,9 +69,17 @@
         <appender-ref ref="FILE_DEBUG"/>
     </logger>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <logger name="com.cplanet.toring" level="INFO">
+        <appender-ref ref="FILE_INFO"/>
+    </logger>
+
+    <logger name="com.cplanet.toring" level="ERROR">
+        <appender-ref ref="FILE_ERROR"/>
+    </logger>
+
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE">
+        <appender-ref ref="FILE_DEBUG"/>
+    </logger>
 
 </configuration>
 

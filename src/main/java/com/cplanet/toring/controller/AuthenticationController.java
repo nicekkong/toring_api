@@ -103,9 +103,9 @@ public class AuthenticationController  extends BaseController {
     @GetMapping(value = "/memberInfo")
     public Member sampleMemberInfo() {
         logger.info("access_token in cookie ::: {} ", this.getAccessToken());
-        if(getAccessToken() == null) {
-            return new Member();
-        }
+//        if(getAccessToken() == null) {
+//            return new Member();
+//        }
 
         return this.getMemberInfo();
     }

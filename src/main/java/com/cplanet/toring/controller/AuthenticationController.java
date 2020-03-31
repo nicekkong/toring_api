@@ -86,9 +86,7 @@ public class AuthenticationController  extends BaseController {
 
     @GetMapping(value = "/auth/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-
         response.addCookie(accessTokenCookie.removeAccessCookie());
-
         return ResponseEntity.ok(new ApiResponse(true, "logout success"));
     }
 
@@ -102,11 +100,11 @@ public class AuthenticationController  extends BaseController {
 
     @GetMapping(value = "/memberInfo")
     public Member sampleMemberInfo() {
+
         logger.info("access_token in cookie ::: {} ", this.getAccessToken());
         if(getAccessToken() == null) {
             return new Member();
         }
-
         return this.getMemberInfo();
     }
 

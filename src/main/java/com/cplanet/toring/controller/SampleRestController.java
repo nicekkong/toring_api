@@ -75,8 +75,6 @@ public class SampleRestController {
         ResponseEntity<MaskResponseDto> responseEntity = restTemplate.getForEntity("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address={address}", MaskResponseDto.class,  param);
 
         logger.debug("result => {}", responseEntity.getBody());
-        logger.debug("result => {}", principal.getName());
-        logger.debug("result => {} : {}", member.getName(), member.getPassword());
 
         return responseEntity.getBody();
     }

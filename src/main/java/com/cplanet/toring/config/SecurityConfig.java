@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 // 인증이 필요없는 URL 패턴
                 .antMatchers("/api/login/**", "/api/signup/**").permitAll()
-                .antMatchers("/mentoring/**").permitAll()
+                .antMatchers("/api/mentoring/content/**").permitAll()
                 .antMatchers("/mask/**").permitAll()
 //                .antMatchers("/login/**", "/signup/**", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html","/**/*.css", "/**/*.js").permitAll()
 //                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()

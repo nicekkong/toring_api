@@ -1,40 +1,36 @@
 package com.cplanet.toring.controller;
 
-import com.cplanet.toring.domain.Content;
-import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.CategoryDto;
-import com.cplanet.toring.dto.ContentRequest;
-import com.cplanet.toring.service.MemberService;
+import com.cplanet.toring.dto.ContentDto;
 import com.cplanet.toring.service.MentoringService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(value = {"/mentoring"})
-public class MentoringController {
+@RequestMapping(value = {"/api/mentoring"})
+public class MentoringController extends BaseController {
 
     private MentoringService mentoringService;
-    private MemberService memberService;
-    private ModelMapper modelMapper;
 
-    public MentoringController(MentoringService mentoringService,
-                               MemberService memberService,
-                               ModelMapper modelMapper) {
+    public MentoringController(MentoringService mentoringService) {
         this.mentoringService = mentoringService;
-        this.memberService = memberService;
-        this.modelMapper = modelMapper;
+    }
+
+    @GetMapping(value = "content/info")
+    public ContentDto getContent(@RequestParam(value = "contentid") long contentid) {
+        return mentoringService.getContentInfo(contentid);
     }
 
     @PostMapping(value = "content/save")
-    public ApiResponse contentSave(@Valid @RequestBody ContentRequest contentRequest) {
-        Content content = modelMapper.map(contentRequest, Content.class);
-        ApiResponse response = mentoringService.registerContent(content);
-        return response;
+    public ContentDto contentSave(@RequestBody ContentDto content) {
+        if(StringUtils.isEmpty(content.getMemberid())) {
+//            content.setMemberId(this.getMemberInfo().getId());
+            content.setMemberid(63L);
+        }
+        return mentoringService.registerContent(content);
     }
 
     @GetMapping(value = "content/category")

@@ -1,38 +1,90 @@
 package com.cplanet.toring.service;
 
-import com.cplanet.toring.domain.Content;
-import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.domain.Category;
+import com.cplanet.toring.dto.ContentDto;
 import com.cplanet.toring.mapper.ContentMapper;
-import com.cplanet.toring.repository.ContentRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class MentoringService {
 
     final static Logger logger = LoggerFactory.getLogger(MentoringService.class);
+    final static String PREVIEW_SAVE = "01";
+    final static String CONTENT_SAVE = "02";
+    final static String ATTACH_SAVE = "03";
+    final static String CONTENT_STATUS_TEMPORARY = "temporary";
+    final static String CONTENT_STATUS_DISPLAY = "display";
+    final static String CONTENT_STATUS_DELETED = "deleted";
 
-    private ContentRepository contentRepository;
     private ContentMapper contentMapper;
+    private ModelMapper modelMapper;
 
-    public MentoringService(ContentRepository contentRepository, ContentMapper contentMapper) {
-        this.contentRepository = contentRepository;
+    public MentoringService(ContentMapper contentMapper, ModelMapper modelMapper) {
         this.contentMapper = contentMapper;
+        this.modelMapper = modelMapper;
     }
 
-    public ApiResponse registerContent(Content content) {
-        try {
-            contentRepository.save(content);
-        } catch (Exception e) {
-            logger.error("content save error - memberId:[{}]",content.getMemberId());
-            return new ApiResponse(false, "content save fail");
+    public ContentDto registerContent(ContentDto content) {
+        logger.debug("requestType:"+ content.getRequesttype());
+        ContentDto result = new ContentDto();
+
+        boolean success = false;
+
+        if (PREVIEW_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
+            try {
+                if(content.getId() != null && content.getId() > 0) {
+                    contentMapper.updateStartStep1(content);
+                } else {
+                    contentMapper.insertStartStep1(content);
+                }
+                result.setId(content.getId());
+                success = true;
+            } catch (Exception e) {
+                logger.error("content save/update error - memberId:[{}]", content.getMemberid(), e);
+                result.setSuccess(false);
+                return result;
+            }
         }
-        return new ApiResponse(true, "content save success");
+        if (CONTENT_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
+            try {
+                if(content.getId() != null && content.getId() > 0) {
+                    if(content.getPageno() == 1) {
+                        contentMapper.updateStartStep2Page1(content);
+                    }
+                    if(content.getPageno() == 2) {
+                        contentMapper.updateStartStep2Page2(content);
+                    }
+                    if(content.getPageno() == 3) {
+                        contentMapper.updateStartStep2Page3(content);
+                    }
+                }
+                result.setId(content.getId());
+                success = true;
+            } catch (Exception e) {
+                logger.error("content save/update error - memberId:[{}]", content.getMemberid(), e);
+                result.setSuccess(false);
+                return result;
+            }
+        }
+        if (ATTACH_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
+            try {
+                contentMapper.updateAttatchStep(content);
+                result.setId(content.getId());
+                success = true;
+            } catch (Exception e) {
+                logger.error("content save/update error - memberId:[{}]", content.getMemberid(), e);
+                result.setSuccess(false);
+                return result;
+            }
+        }
+        result.setSuccess(success);
+        return result;
     }
 
     public Category getToringCategories() {
@@ -40,5 +92,15 @@ public class MentoringService {
         categoryInfo.setMainCategory(contentMapper.selectMainCategory());
         categoryInfo.setSubCategory(contentMapper.selectSubCategory());
         return categoryInfo;
+    }
+
+    public ContentDto getContentInfo(long contentid) {
+        ContentDto contentInfo = contentMapper.selectContentInfo(contentid);
+        if(contentInfo != null) {
+            contentInfo.setSuccess(true);
+        } else {
+            contentInfo = new ContentDto();
+        }
+        return contentInfo;
     }
 }

@@ -1,13 +1,17 @@
 package com.cplanet.toring.repository;
 
+import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.TestData;
 import com.cplanet.toring.dto.TestDataRequestDto;
 import com.cplanet.toring.mapper.TestDataMapper;
+import com.cplanet.toring.service.DecisionBoardService;
 import com.cplanet.toring.service.TestDataService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -22,6 +26,12 @@ public class RepositoryServiceTest {
 
     @Autowired
     TestDataRepository testDataRepository;
+
+    @Autowired
+    private DecisionBoardService decisionBoardService;
+
+    @Autowired
+    private DecisionBoardRepository decisionBoardRepository;
 
     @Test
     public void testSave() {
@@ -62,6 +72,45 @@ public class RepositoryServiceTest {
         List<String> testDatas = testDataMapper.selectByStrSearch("nice");
         testDatas.forEach(System.out::println);
 
+    }
+
+    @Test
+    public void testDBoard() {
+
+
+        Page<DecisionBoard> decisionBoardMain = decisionBoardService.getDecisionBoardMain(1);
+
+
+        System.out.println(decisionBoardMain);
+
+    }
+
+    @Test
+    public void insertDB() {
+
+        DecisionBoard db = DecisionBoard.builder()
+                .memberId(1L)
+                .title("TEST DCS BOARD")
+                .contents("asdfasdfsad")
+                .build();
+
+
+        decisionBoardRepository.save(db);
+    }
+
+    @Value("${permitAllUrls}")
+    private List<String> permitUrl;
+//    private  String[] permitUrl;
+
+    @Value("${my.email}")
+    String email;
+
+    @Test
+    public void testValue() {
+        List<String> l = permitUrl;
+//        String[] l = permitUrl;
+
+        System.out.println(permitUrl + email);
     }
 
 

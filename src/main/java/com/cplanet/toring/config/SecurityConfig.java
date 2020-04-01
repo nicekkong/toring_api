@@ -3,6 +3,7 @@ package com.cplanet.toring.config;
 import com.cplanet.toring.component.JwtAuthenticationEntryPoint;
 import com.cplanet.toring.filter.JwtAuthenticationFilter;
 import com.cplanet.toring.service.security.MemberDetailService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.memberDetailService = memberDetailService;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
+
+    @Value("${permitAllUrls}")
+    private List<String> permitUrls;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -48,22 +54,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.cors()
             .and()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                // 인증이 필요없는 URL 패턴
-                .antMatchers("/api/login/**", "/api/signup/**", "/api/memberInfo").permitAll()
-                .antMatchers("/mentoring/**").permitAll()
-                .antMatchers("/mask/**").permitAll()
-//                .antMatchers("/login/**", "/signup/**", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html","/**/*.css", "/**/*.js").permitAll()
-//                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
-//                .antMatchers(HttpMethod.GET, "/", "/api/users/**").permitAll()
                 .anyRequest().authenticated()
-
         ;
+
+        // 인증이 필요 없는 URL (application.yaml >  permitAllUrls)
+        permitUrls.forEach(http::antMatcher);
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

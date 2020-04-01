@@ -1,7 +1,9 @@
 package com.cplanet.toring.repository;
 
 import com.cplanet.toring.domain.DecisionBoard;
+import com.cplanet.toring.domain.DecisionChoice;
 import com.cplanet.toring.domain.TestData;
+import com.cplanet.toring.dto.DecisionBoardRequestDto;
 import com.cplanet.toring.dto.TestDataRequestDto;
 import com.cplanet.toring.mapper.TestDataMapper;
 import com.cplanet.toring.service.DecisionBoardService;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -32,6 +35,11 @@ public class RepositoryServiceTest {
 
     @Autowired
     private DecisionBoardRepository decisionBoardRepository;
+
+    @Autowired
+    private DecisionChoiceRepository decisionChoiceRepository;
+
+
 
     @Test
     public void testSave() {
@@ -90,13 +98,47 @@ public class RepositoryServiceTest {
 
         DecisionBoard db = DecisionBoard.builder()
                 .memberId(1L)
-                .title("TEST DCS BOARD")
+                .title("TEST DCS BOARD5555")
                 .contents("asdfasdfsad")
                 .build();
 
 
+        DecisionChoice decisionChoice1 = DecisionChoice.builder()
+                .optionText("AAAAAA")
+//                .decisionBoard(db)
+                .build();
+//        decisionChoice1.setDecisionBoard(db);
+
+//        decisionChoiceRepository.save(decisionChoice1);
+
+        DecisionChoice decisionChoice2 = DecisionChoice.builder()
+                .optionText("BBBB")
+//                .decisionBoard(db)
+                .build();
+//        decisionChoice2.setDecisionBoard(db);
+//        decisionChoiceRepository.save(decisionChoice2);
+
+        db.addDecisionChoice(decisionChoice1);
+        db.addDecisionChoice(decisionChoice2);
+
         decisionBoardRepository.save(db);
+
     }
+
+    @Test
+    public void createDecisionBoardTest() {
+
+        DecisionBoardRequestDto dto = DecisionBoardRequestDto.builder()
+                .title("결정장애 정해주세요.")
+                .contents("자세한 내용 입니다. ")
+                .memberId(1L)
+                .optionText(Arrays.asList("11111", "22222"))
+                .build();
+
+        decisionBoardService.createDecisionBoard(dto);
+
+    }
+
 
     @Value("${permitAllUrls}")
     private List<String> permitUrl;

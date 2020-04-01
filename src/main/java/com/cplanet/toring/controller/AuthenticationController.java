@@ -66,7 +66,6 @@ public class AuthenticationController  extends BaseController {
             response.addCookie(accessTokenCookie.createAccessToken(jwt));
             result.put("access_token", jwt);
 
-
 //            response.addHeader("Content-Type", "application/json;charset=UTF-8");
 //            response.addHeader("Access-Control-Allow-Credentials", "true");
 //            response.addHeader("Access-Control-Allow-Origin", "local.nicekkong2.com");
@@ -74,7 +73,6 @@ public class AuthenticationController  extends BaseController {
 //                    "Origin, X-Requested-With, Content-Type, Accept");
 
         }
-
 
         result.put("success", signUpMember.getSuccess());
         result.put("message", signUpMember.getMessage());

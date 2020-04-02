@@ -1,4 +1,4 @@
-package com.cplanet.toring.dto;
+package com.cplanet.toring.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

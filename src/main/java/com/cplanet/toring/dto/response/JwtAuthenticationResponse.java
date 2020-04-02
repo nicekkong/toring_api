@@ -1,4 +1,4 @@
-package com.cplanet.toring.dto;
+package com.cplanet.toring.dto.response;
 
 public class JwtAuthenticationResponse {
     private String accessToken;

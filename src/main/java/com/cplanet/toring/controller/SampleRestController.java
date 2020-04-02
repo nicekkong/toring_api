@@ -4,7 +4,7 @@ import com.cplanet.toring.annotation.CurrentUser;
 import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.domain.TestData;
 import com.cplanet.toring.domain.security.MemberPrincipal;
-import com.cplanet.toring.dto.MaskResponseDto;
+import com.cplanet.toring.dto.response.MaskResponseDto;
 import com.cplanet.toring.dto.TestDataResponseDto;
 import com.cplanet.toring.repository.TestDataRepository;
 import com.cplanet.toring.service.TestDataService;

@@ -3,8 +3,9 @@ package com.cplanet.toring.repository;
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
 import com.cplanet.toring.domain.TestData;
-import com.cplanet.toring.dto.DecisionBoardRequestDto;
 import com.cplanet.toring.dto.TestDataRequestDto;
+import com.cplanet.toring.dto.request.DecisionMainRequestDto;
+import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.mapper.TestDataMapper;
 import com.cplanet.toring.service.DecisionBoardService;
 import com.cplanet.toring.service.TestDataService;
@@ -13,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -84,12 +84,19 @@ public class RepositoryServiceTest {
 
     @Test
     public void testDBoard() {
+        DecisionMainResponseDto decisionBoardMain = decisionBoardService.getDecisionBoardMain(0);
+        System.out.println("SIZE() " + decisionBoardMain.getDecisionBoards().size());
+        decisionBoardMain.getDecisionBoards().forEach(d -> {
+            System.out.println(d.getTitle());
+            d.getDecisionChoices().forEach(c -> {
+                System.out.println(c.getOptionText());
+            });
+        });
 
 
-        Page<DecisionBoard> decisionBoardMain = decisionBoardService.getDecisionBoardMain(1);
+        System.out.println(decisionBoardMain.getHasNext());
 
 
-        System.out.println(decisionBoardMain);
 
     }
 
@@ -128,7 +135,7 @@ public class RepositoryServiceTest {
     @Test
     public void createDecisionBoardTest() {
 
-        DecisionBoardRequestDto dto = DecisionBoardRequestDto.builder()
+        DecisionMainRequestDto dto = DecisionMainRequestDto.builder()
                 .title("결정장애 정해주세요.")
                 .contents("자세한 내용 입니다. ")
                 .memberId(1L)
@@ -136,6 +143,14 @@ public class RepositoryServiceTest {
                 .build();
 
         decisionBoardService.createDecisionBoard(dto);
+
+    }
+
+    @Test
+    public void testBoardDetail() {
+        DecisionBoard db = decisionBoardRepository.findByIdAndAndDisplayStatus_Ok(10l).orElse(null);
+        System.out.println(db.getTitle());
+        db.getDecisionChoices().forEach(System.out::println);
 
     }
 

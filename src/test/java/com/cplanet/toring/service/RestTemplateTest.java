@@ -1,6 +1,6 @@
 package com.cplanet.toring.service;
 
-import com.cplanet.toring.dto.MaskResponseDto;
+import com.cplanet.toring.dto.response.MaskResponseDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

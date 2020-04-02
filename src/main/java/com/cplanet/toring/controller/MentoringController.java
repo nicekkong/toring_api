@@ -3,7 +3,7 @@ package com.cplanet.toring.controller;
 import com.cplanet.toring.domain.Content;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.CategoryDto;
-import com.cplanet.toring.dto.ContentRequest;
+import com.cplanet.toring.dto.request.ContentRequest;
 import com.cplanet.toring.service.MemberService;
 import com.cplanet.toring.service.MentoringService;
 import lombok.extern.slf4j.Slf4j;

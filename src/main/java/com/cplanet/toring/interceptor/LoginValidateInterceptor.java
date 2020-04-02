@@ -15,11 +15,6 @@ public class LoginValidateInterceptor extends HandlerInterceptorAdapter {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-
-
-
-
-
         return true;
     }
 }

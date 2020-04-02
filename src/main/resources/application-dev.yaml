@@ -29,14 +29,25 @@ spring:
 #    database: mysql
 #    database-platform:
     properties:
-      hibernate.dialect: org.hibernate.dialect.MariaDB53Dialect
-      format_sql: true
+      hibernate:
+       dialect: org.hibernate.dialect.MariaDB53Dialect
+       show-sql: true
+       format_sql: true
+       use_sql_comments: true
 
 
 logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
   config: classpath:${spring.profiles}/logback.xml
 #  level.org.hibernate.type.descriptor.sql: trace
 
 
 my:
   email: local-nicekkong@gmail.com
+

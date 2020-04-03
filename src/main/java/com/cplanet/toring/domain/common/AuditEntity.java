@@ -2,6 +2,7 @@ package com.cplanet.toring.domain.common;
 
 
 import com.cplanet.toring.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,9 +20,11 @@ import java.time.LocalDateTime;
 public class AuditEntity {
 
     @CreatedDate
+    @JsonIgnore
     private LocalDateTime createDate;
 
     @LastModifiedDate
+    @JsonIgnore
     private LocalDateTime updateDate;
 
     public String getCreateDate() {

@@ -85,12 +85,10 @@ public class RepositoryServiceTest {
     @Test
     public void testDBoard() {
         DecisionMainResponseDto decisionBoardMain = decisionBoardService.getDecisionBoardMain(0);
-        System.out.println("SIZE() " + decisionBoardMain.getDecisionBoards().size());
-        decisionBoardMain.getDecisionBoards().forEach(d -> {
+        System.out.println("SIZE() " + decisionBoardMain.getDecisionMains().size());
+        decisionBoardMain.getDecisionMains().forEach(d -> {
             System.out.println(d.getTitle());
-            d.getDecisionChoices().forEach(c -> {
-                System.out.println(c.getOptionText());
-            });
+            d.getOptionText().forEach(System.out::println);
         });
 
 

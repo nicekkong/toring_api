@@ -24,5 +24,6 @@ permitAllUrls:
   /api/signup/**,
   /api/memberInfo,
   /api/mentoring/**,
+  /api/decision/main,
   /mask/**
 

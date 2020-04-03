@@ -1,6 +1,5 @@
 package com.cplanet.toring.dto.response;
 
-import com.cplanet.toring.domain.DecisionBoard;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -11,8 +10,20 @@ import java.util.List;
 @Builder
 public class DecisionMainResponseDto {
 
-    @Builder.Default
-    private List<DecisionBoard> decisionBoards = new ArrayList<>();
+    private Integer count;
     private Boolean hasNext;
+    @Builder.Default
+    private List<DecisionMain> decisionMains = new ArrayList<>();
+
+    @Getter @Setter
+    @AllArgsConstructor @NoArgsConstructor
+    @Builder
+    public static class DecisionMain {
+        private Long id;
+        private String title;
+        @Builder.Default
+        private List<String> optionText = new ArrayList<>();
+
+    }
 
 }

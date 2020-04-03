@@ -13,7 +13,7 @@ public interface DecisionBoardRepository extends JpaRepository<DecisionBoard, Lo
     // @Query 와 Page 객체를 함께 사용하려면 'countQuery' 속성을 함께 정의해야한다.
     @Query(value = "SELECT b FROM DecisionBoard b JOIN FETCH b.decisionChoices WHERE b.displayStatus='OK' ORDER BY b.createDate desc",
             countQuery = "SELECT COUNT(b) FROM DecisionBoard b WHERE b.displayStatus='OK'")
-    Page<DecisionBoard> findAllByDisplayStatusOrderByCreateDateDesc(Pageable page);
+    Page<DecisionBoard> findDecisionBoardMain(Pageable page);
 
     @Query("SELECT b FROM DecisionBoard b JOIN FETCH b.decisionChoices WHERE b.displayStatus='OK' AND b.id = :id")
     Optional<DecisionBoard> findByIdAndAndDisplayStatus_Ok(Long id);

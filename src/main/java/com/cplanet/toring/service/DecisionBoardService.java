@@ -13,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DecisionBoardService {
 
@@ -30,19 +33,39 @@ public class DecisionBoardService {
     // TODO : 메인 페이지에서 조회되는 갯수 수정
     int PER_PAGE = 3;
 
-
     /**
      * 결정장애 메인화면 조회
      * @param page
      * @return
      */
     public DecisionMainResponseDto getDecisionBoardMain(int page) {
-        Page<DecisionBoard> board = decisionBoardRepository.findAllByDisplayStatusOrderByCreateDateDesc(PageRequest.of(page, PER_PAGE));
+        Page<DecisionBoard> board = decisionBoardRepository.findDecisionBoardMain(PageRequest.of(page, PER_PAGE));
         logger.debug("Total Size : {}", board.getTotalElements());
+
+        final List<DecisionBoard> content = board.getContent();
+
         DecisionMainResponseDto responseDto = DecisionMainResponseDto.builder()
-                .decisionBoards(board.getContent())
+                .count(content.size())
                 .hasNext(board.hasNext())
                 .build();
+
+        List<DecisionMainResponseDto.DecisionMain> mains = new ArrayList<>();
+        content.forEach(c -> {
+            DecisionMainResponseDto.DecisionMain main = DecisionMainResponseDto.DecisionMain.builder()
+                    .id(c.getId())
+                    .title(c.getTitle())
+                    .build();
+
+            List<String> optionTexts = new ArrayList<>();
+            c.getDecisionChoices().forEach(t -> {
+                optionTexts.add(t.getOptionText());
+            });
+            main.setOptionText(optionTexts);
+
+            mains.add(main);
+        });
+        responseDto.setDecisionMains(mains);
+
         return responseDto;
     }
 

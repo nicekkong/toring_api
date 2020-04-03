@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,7 +28,8 @@ public class FileUploadController {
             String filePath = s3Service.upload(file);
             if(!StringUtils.isEmpty(filePath)) {
                 response.setSuccess(true);
-                response.setFilepath(filePath);
+                response.setName(file.getOriginalFilename());
+                response.setPath(filePath);
             } else {
                 response.setSuccess(false);
             }

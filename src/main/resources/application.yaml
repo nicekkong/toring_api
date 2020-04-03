@@ -24,5 +24,18 @@ permitAllUrls:
   /api/signup/**,
   /api/memberInfo,
   /api/mentoring/**,
+  /file/**,
   /mask/**
 
+# aws 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAJUFPOBHXMCTZKEPQ
+      secretKey: 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
+    s3:
+      bucket: toringfile
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

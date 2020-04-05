@@ -1,7 +1,8 @@
 package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.Category;
-import com.cplanet.toring.dto.ContentDto;
+import com.cplanet.toring.dto.request.ContentRequest;
+import com.cplanet.toring.dto.response.ContentResponse;
 import com.cplanet.toring.mapper.ContentMapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -27,9 +28,10 @@ public class MentoringService {
         this.modelMapper = modelMapper;
     }
 
-    public ContentDto registerContent(ContentDto content) {
+    public ContentResponse registerContent(ContentRequest content) {
         logger.debug("requestType:"+ content.getRequesttype());
-        ContentDto result = new ContentDto();
+
+        ContentResponse result = new ContentResponse();
 
         boolean success = false;
 
@@ -92,12 +94,12 @@ public class MentoringService {
         return categoryInfo;
     }
 
-    public ContentDto getContentInfo(long contentid) {
-        ContentDto contentInfo = contentMapper.selectContentInfo(contentid);
+    public ContentResponse getContentInfo(long contentid) {
+        ContentResponse contentInfo = contentMapper.selectContentInfo(contentid);
         if(contentInfo != null) {
             contentInfo.setSuccess(true);
         } else {
-            contentInfo = new ContentDto();
+            contentInfo = new ContentResponse();
         }
         return contentInfo;
     }

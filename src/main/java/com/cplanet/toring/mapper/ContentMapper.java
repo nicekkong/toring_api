@@ -1,7 +1,8 @@
 package com.cplanet.toring.mapper;
 
 import com.cplanet.toring.domain.Category;
-import com.cplanet.toring.dto.ContentDto;
+import com.cplanet.toring.dto.request.ContentRequest;
+import com.cplanet.toring.dto.response.ContentResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,17 +16,17 @@ public interface ContentMapper {
 
     List<Category.SubCategory> selectSubCategory();
 
-    int updateStartStep1(ContentDto content);
+    int updateStartStep1(ContentRequest content);
 
-    int insertStartStep1(ContentDto content);
+    int insertStartStep1(ContentRequest content);
 
-    ContentDto selectContentInfo(long contentid);
+    ContentResponse selectContentInfo(long contentid);
 
-    int updateStartStep2Page1(ContentDto content);
+    int updateStartStep2Page1(ContentRequest content);
 
-    int updateStartStep2Page2(ContentDto content);
+    int updateStartStep2Page2(ContentRequest content);
 
-    int updateStartStep2Page3(ContentDto content);
+    int updateStartStep2Page3(ContentRequest content);
 
-    int updateAttatchStep(ContentDto content);
+    int updateAttatchStep(ContentRequest content);
 }

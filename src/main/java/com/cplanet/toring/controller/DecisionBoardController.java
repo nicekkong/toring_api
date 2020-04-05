@@ -1,5 +1,6 @@
 package com.cplanet.toring.controller;
 
+import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.service.DecisionBoardService;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,19 @@ public class DecisionBoardController extends BaseController {
     public ResponseEntity<?> getDecisionBoardMain(@RequestParam(required = false, defaultValue = "0") int page) {
         DecisionMainResponseDto board = decisionBoardService.getDecisionBoardMain(page);
         return ResponseEntity.ok(board);
+    }
+
+    /**
+     * 결정장애 상세 페이지 내용 조회
+     * @param id
+     * @return
+     */
+    @GetMapping(value="/decision/detail")
+    public ResponseEntity<?> getDecisionBoardDetail(@RequestParam(name="decision_id") long id) {
+
+        DecisionDetailResponseDto dto = decisionBoardService.getDecisionBoardDetail(id);
+
+        return ResponseEntity.ok(dto);
     }
 
 }

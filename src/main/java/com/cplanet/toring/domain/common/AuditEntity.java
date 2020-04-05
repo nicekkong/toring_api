@@ -27,11 +27,11 @@ public class AuditEntity {
     @JsonIgnore
     private LocalDateTime updateDate;
 
-    public String getCreateDate() {
+    public String getCreateDateToString() {
         return DateUtils.toStringYYYYMMDDHHMMSS(this.createDate);
     }
 
-    public String getUpdateDate() {
+    public String getUpdateDateToString() {
         return DateUtils.toStringYYYYMMDDHHMMSS(this.updateDate);
     }
 

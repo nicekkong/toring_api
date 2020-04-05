@@ -3,9 +3,11 @@ package com.cplanet.toring.service;
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
 import com.cplanet.toring.dto.request.DecisionMainRequestDto;
+import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.repository.DecisionBoardRepository;
 import com.cplanet.toring.repository.DecisionChoiceRepository;
+import com.cplanet.toring.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -90,5 +92,26 @@ public class DecisionBoardService {
             board.addDecisionChoice(choice);
         });
         decisionBoardRepository.save(board);
+    }
+
+
+    public DecisionDetailResponseDto getDecisionBoardDetail(Long id) {
+
+        DecisionBoard board = decisionBoardRepository.findByIdAndAndDisplayStatus_Ok(id).orElse(null);
+
+        DecisionDetailResponseDto dto = DecisionDetailResponseDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .nickName("nick_name")
+                .memberId(board.getMemberId())
+                .createTime(DateUtils.toHumanizeDateTime(board.getCreateDate()))
+                .contents(board.getContents())
+                .answer01(board.getDecisionChoices().get(0).getOptionText())
+                .answer02(board.getDecisionChoices().get(1).getOptionText())
+                .count01(board.getDecisionChoices().get(0).getCount())
+                .build();
+
+        return dto;
+
     }
 }

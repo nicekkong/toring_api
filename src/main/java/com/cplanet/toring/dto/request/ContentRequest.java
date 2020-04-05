@@ -1,20 +1,32 @@
 package com.cplanet.toring.dto.request;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+import java.time.LocalDateTime;
+
+@Data
 public class ContentRequest {
-    private Long memberId;
+    private Long id;
+    private Long memberid;
     private String title;
     private String keyword;
-    private Long categorySub1;
-    private Long categorySub2;
+    private Long categorysub1;
+    private Long categorysub2;
     private String preview;
     private String content;
-    private String contentTts;
-    private String attatchMeta;
-    private String thumbImage;
-    private String backgroundImage;
+    private String content2;
+    private String content3;
+    private String contenttts;
+    private String attatchmeta;
+    private String thumbimage;
+    private String backgroundimage;
     private Float toring;
+    private String status;
+    private LocalDateTime viewdate;
+    private LocalDateTime createdate;
+    private LocalDateTime updatedate;
+    private String requesttype;
+    private Long pageno;
 }

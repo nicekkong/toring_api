@@ -1,11 +1,11 @@
-package com.cplanet.toring.dto;
+package com.cplanet.toring.dto.response;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class ContentDto {
+public class ContentResponse {
     private boolean success;
     private Long id;
     private Long memberid;

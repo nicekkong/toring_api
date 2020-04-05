@@ -1,7 +1,9 @@
 package com.cplanet.toring.controller;
 
 import com.cplanet.toring.dto.CategoryDto;
-import com.cplanet.toring.dto.ContentDto;
+import com.cplanet.toring.dto.request.ContentRequest;
+import com.cplanet.toring.dto.response.ContentResponse;
+import com.cplanet.toring.exception.UnauthorizedException;
 import com.cplanet.toring.service.MentoringService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,15 @@ public class MentoringController extends BaseController {
     }
 
     @GetMapping(value = "content/info")
-    public ContentDto getContent(@RequestParam(value = "contentid") long contentid) {
+    public ContentResponse getContent(@RequestParam(value = "contentid") long contentid) {
         return mentoringService.getContentInfo(contentid);
     }
 
     @PostMapping(value = "content/save")
-    public ContentDto contentSave(@RequestBody ContentDto content) {
+    public ContentResponse contentSave(@RequestBody ContentRequest content) {
+        content.setMemberid(this.getMemberInfo().getId());
         if(StringUtils.isEmpty(content.getMemberid())) {
-//            content.setMemberId(this.getMemberInfo().getId());
-            content.setMemberid(63L);
+            throw new UnauthorizedException("content/save > memberId is not recognized");
         }
         return mentoringService.registerContent(content);
     }
@@ -40,5 +42,4 @@ public class MentoringController extends BaseController {
         response.setSuccess(true);
         return ResponseEntity.ok(response);
     }
-
 }

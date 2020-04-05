@@ -5,10 +5,12 @@
         SELECT  id, name
         FROM  tr_category_sub1
     </select>
+
     <select id="selectSubCategory" parameterType="java.lang.String" resultType="com.cplanet.toring.domain.Category$SubCategory">
         SELECT  id, name, category_sub1_id as mainCategoryId
         FROM  tr_category_sub2
     </select>
+
     <insert id="insertStartStep1" parameterType="com.cplanet.toring.dto.ContentDto">
         insert into tr_contents (
             member_id,
@@ -33,6 +35,7 @@
             select last_insert_id()
         </selectKey>
     </insert>
+
     <update id="updateStartStep1" parameterType="com.cplanet.toring.dto.ContentDto">
         update tr_contents
         set title = #{title},
@@ -45,6 +48,7 @@
         where id = #{id}
         and member_id = #{memberid}
     </update>
+
     <update id="updateStartStep2Page1" parameterType="com.cplanet.toring.dto.ContentDto">
         update tr_contents
         set content = #{content},
@@ -53,6 +57,7 @@
         where id = #{id}
         and member_id = #{memberid}
     </update>
+
     <update id="updateStartStep2Page2" parameterType="com.cplanet.toring.dto.ContentDto">
         update tr_contents
         set content2 = #{content},
@@ -61,6 +66,7 @@
         where id = #{id}
         and member_id = #{memberid}
     </update>
+
     <update id="updateStartStep2Page3" parameterType="com.cplanet.toring.dto.ContentDto">
         update tr_contents
         set content3 = #{content},
@@ -69,15 +75,27 @@
         where id = #{id}
         and member_id = #{memberid}
     </update>
+
     <update id="updateAttatchStep" parameterType="com.cplanet.toring.dto.ContentDto">
         update tr_contents
         set content_tts = #{contenttts},
             background_image = #{backgroundimage},
             thumb_image = #{thumbimage},
-            attatch_meta = #{attatchmeta}
+            attatch_meta = #{attatchmeta},
+            toring = #{toring},
+            update_date = now()
         where id = #{id}
         and member_id = #{memberid}
     </update>
+
+    <update id="updateContentStatus" parameterType="com.cplanet.toring.dto.ContentDto">
+        update tr_contents
+        set status = #{status},
+            update_date = now()
+        where id = #{id}
+        and member_id = #{memberid}
+    </update>
+
     <select id="selectContentInfo" parameterType="java.lang.Long" resultType="com.cplanet.toring.dto.ContentDto">
         select
           id,
@@ -102,4 +120,5 @@
         from tr_contents
         where id = #{contentid}
     </select>
+
 </mapper>

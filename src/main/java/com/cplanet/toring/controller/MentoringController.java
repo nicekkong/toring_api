@@ -40,5 +40,4 @@ public class MentoringController extends BaseController {
         response.setSuccess(true);
         return ResponseEntity.ok(response);
     }
-
 }

@@ -33,8 +33,8 @@ public class MentoringService {
 
         boolean success = false;
 
+        content.setStatus(CONTENT_STATUS_TEMPORARY);
         if (PREVIEW_SAVE.equals(content.getRequesttype())) {
-            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 if(content.getId() != null && content.getId() > 0) {
                     contentMapper.updateStartStep1(content);
@@ -50,7 +50,6 @@ public class MentoringService {
             }
         }
         if (CONTENT_SAVE.equals(content.getRequesttype())) {
-            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 if(content.getId() != null && content.getId() > 0) {
                     if(content.getPageno() == 1) {
@@ -72,7 +71,6 @@ public class MentoringService {
             }
         }
         if (ATTACH_SAVE.equals(content.getRequesttype())) {
-            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 contentMapper.updateAttatchStep(content);
                 result.setId(content.getId());

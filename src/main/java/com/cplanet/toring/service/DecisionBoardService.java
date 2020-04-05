@@ -2,11 +2,14 @@ package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
+import com.cplanet.toring.domain.DecisionReply;
+import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.dto.request.DecisionMainRequestDto;
 import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.repository.DecisionBoardRepository;
 import com.cplanet.toring.repository.DecisionChoiceRepository;
+import com.cplanet.toring.repository.DecisionReplyRepository;
 import com.cplanet.toring.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +28,14 @@ public class DecisionBoardService {
 
     final private DecisionBoardRepository decisionBoardRepository;
     final private DecisionChoiceRepository decisionChoiceRepository;
+    final private DecisionReplyRepository decisionReplyRepository;
 
     public DecisionBoardService(DecisionBoardRepository decisionBoardRepository
-            , DecisionChoiceRepository decisionChoiceRepository) {
+            , DecisionChoiceRepository decisionChoiceRepository
+            , DecisionReplyRepository decisionReplyRepository) {
         this.decisionBoardRepository = decisionBoardRepository;
         this.decisionChoiceRepository = decisionChoiceRepository;
+        this.decisionReplyRepository = decisionReplyRepository;
     }
 
     // TODO : 메인 페이지에서 조회되는 갯수 수정
@@ -112,6 +118,32 @@ public class DecisionBoardService {
                 .build();
 
         return dto;
+    }
+
+    public void createDecisionReply(Long boardId, String comment, Member writer) {
+
+        DecisionReply decisionReply = DecisionReply.builder()
+                .memberId(writer.getId())
+                .comment(comment)
+                // TODO : 프로필에서 가져오도록 수정 필요
+                .nickname("nice_name")
+                .boardId(boardId)
+                .build();
+
+        DecisionReply decisionReply1 = decisionReplyRepository.save(decisionReply);
+
+        System.out.println(decisionReply1);
+
+    }
+
+    public List<DecisionReply> getDecisionBoardReplies(Long boardId) {
+
+        List<DecisionReply> replies = decisionReplyRepository.findDecisionRepliesByBoardIdOrderByCreateDate(boardId);
+        // 작성일 추가
+        replies.forEach(r -> {
+            r.setCreated(DateUtils.toHumanizeDateTime(r.getCreateDate()));
+        });
+        return replies;
 
     }
 }

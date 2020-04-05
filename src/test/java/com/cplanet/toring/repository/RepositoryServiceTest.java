@@ -2,6 +2,7 @@ package com.cplanet.toring.repository;
 
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
+import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.domain.TestData;
 import com.cplanet.toring.dto.TestDataRequestDto;
 import com.cplanet.toring.dto.request.DecisionMainRequestDto;
@@ -12,7 +13,6 @@ import com.cplanet.toring.service.TestDataService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -28,7 +28,7 @@ public class RepositoryServiceTest {
 
 
     @Autowired
-    TestDataRepository testDataRepository;
+    private TestDataRepository testDataRepository;
 
     @Autowired
     private DecisionBoardService decisionBoardService;
@@ -38,6 +38,9 @@ public class RepositoryServiceTest {
 
     @Autowired
     private DecisionChoiceRepository decisionChoiceRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
 
 
@@ -152,21 +155,19 @@ public class RepositoryServiceTest {
 
     }
 
-
-    @Value("${permitAllUrls}")
-    private List<String> permitUrl;
-//    private  String[] permitUrl;
-
-    @Value("${my.email}")
-    String email;
-
     @Test
-    public void testValue() {
-        List<String> l = permitUrl;
-//        String[] l = permitUrl;
+    public void testSaveReply() {
 
-        System.out.println(permitUrl + email);
+        Member member = memberRepository.findById(2L).orElse(null);
+
+        decisionBoardService.createDecisionReply(9L,"이건 뭐지??", member);
     }
 
+    @Test
+    public void testReplies() {
+
+        decisionBoardService.getDecisionBoardReplies(9L).forEach(System.out::println);
+
+    }
 
 }

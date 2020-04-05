@@ -1,5 +1,6 @@
 package com.cplanet.toring.controller;
 
+import com.cplanet.toring.domain.DecisionReply;
 import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.service.DecisionBoardService;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api")
@@ -39,8 +42,13 @@ public class DecisionBoardController extends BaseController {
     public ResponseEntity<?> getDecisionBoardDetail(@RequestParam(name="decision_id") long id) {
 
         DecisionDetailResponseDto dto = decisionBoardService.getDecisionBoardDetail(id);
-
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value="/decision/detail/reply")
+    public ResponseEntity<?> getDecsionBoardDetailReply(@RequestParam(name="decision_id")long id) {
+        List<DecisionReply> replies = decisionBoardService.getDecisionBoardReplies(id);
+        return ResponseEntity.ok(replies);
     }
 
 }

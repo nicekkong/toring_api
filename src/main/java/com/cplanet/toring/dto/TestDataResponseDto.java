@@ -2,7 +2,6 @@ package com.cplanet.toring.dto;
 
 
 import com.cplanet.toring.domain.TestData;
-import com.cplanet.toring.utils.DateUtils;
 import lombok.Getter;
 
 @Getter
@@ -28,7 +27,7 @@ public class TestDataResponseDto {
         this.id = entity.getId();
         this.intData = entity.getIntData();
         this.stringData = entity.getStringData();
-        this.createDate = entity.getCreateDate();
-        this.updateDate = entity.getUpdateDate();
+        this.createDate = entity.getCreateDateToString();
+        this.updateDate = entity.getUpdateDateToString();
     }
 }

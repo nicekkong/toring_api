@@ -25,6 +25,7 @@ permitAllUrls:
   /api/memberInfo,
   /api/mentoring/**,
   /file/**,
+  /api/decision/main,
   /mask/**
 
 # aws 설정

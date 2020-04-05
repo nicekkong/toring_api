@@ -1,4 +1,4 @@
-package com.cplanet.toring.dto;
+package com.cplanet.toring.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

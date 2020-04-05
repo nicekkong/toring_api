@@ -6,8 +6,8 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="tr_decision_board")
@@ -27,10 +27,10 @@ public class DecisionBoard extends AuditEntity {
     private ContentsStatus displayStatus = ContentsStatus.OK;
 
     @OneToMany(fetch = FetchType.EAGER,
-            mappedBy = "id",
-            cascade = CascadeType.PERSIST)
+            mappedBy = "decisionBoard",
+            cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<DecisionChoice> decisionChoices = new HashSet<>();
+    private List<DecisionChoice> decisionChoices = new ArrayList<>();
 
     public void addDecisionChoice(DecisionChoice decisionChoice) {
         this.decisionChoices.add(decisionChoice);

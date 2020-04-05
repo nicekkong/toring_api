@@ -1,6 +1,7 @@
 package com.cplanet.toring.service;
 
-import com.cplanet.toring.dto.MaskResponseDto;
+import com.cplanet.toring.dto.response.MaskResponseDto;
+import com.cplanet.toring.utils.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,6 +87,17 @@ public class RestTemplateTest {
         sampleCacheService.cacheEvict("threeMinCache", "nicekkong");
         System.out.println("========================================");
         System.out.println(sampleCacheService.getCacheEmail("nicekkong"));
+    }
+
+
+    @Test
+    public void testHumanize() {
+
+        LocalDateTime time = LocalDateTime.of(2020, 4,5, 11, 10, 30);
+        System.out.println(Duration.between(LocalTime.of(time.getHour(), time.getMinute()), LocalTime.of(time.getHour(), time.getMinute())).toHours());
+
+        System.out.println(DateUtils.toHumanizeDateTime(time));
+
     }
 
 }

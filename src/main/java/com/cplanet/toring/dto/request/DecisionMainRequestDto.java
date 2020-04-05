@@ -1,4 +1,4 @@
-package com.cplanet.toring.dto;
+package com.cplanet.toring.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class DecisionBoardRequestDto {
+public class DecisionMainRequestDto {
 
     private String title;
     private String contents;

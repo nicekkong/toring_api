@@ -45,9 +45,14 @@ public class DecisionBoardController extends BaseController {
         return ResponseEntity.ok(dto);
     }
 
+    /**
+     * 결정장애 상세 페이지 댓글 조회
+     * @param decisionId
+     * @return
+     */
     @GetMapping(value="/decision/detail/reply")
-    public ResponseEntity<?> getDecsionBoardDetailReply(@RequestParam(name="decision_id")long id) {
-        List<DecisionReply> replies = decisionBoardService.getDecisionBoardReplies(id);
+    public ResponseEntity<?> getDecsionBoardDetailReply(@RequestParam(name="decision_id")long decisionId) {
+        List<DecisionReply> replies = decisionBoardService.getDecisionBoardReplies(decisionId);
         return ResponseEntity.ok(replies);
     }
 

@@ -8,4 +8,6 @@ import java.util.List;
 public interface DecisionReplyRepository extends JpaRepository<DecisionReply, Long> {
 
     List<DecisionReply> findDecisionRepliesByBoardIdOrderByCreateDate(Long boardId);
+
+    List<DecisionReply> findDecisionRepliesByBoardId(Long boardId);
 }

@@ -4,13 +4,16 @@ import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
 import com.cplanet.toring.domain.DecisionReply;
 import com.cplanet.toring.domain.Member;
+import com.cplanet.toring.domain.enums.ContentsStatus;
 import com.cplanet.toring.dto.request.DecisionMainRequestDto;
+import com.cplanet.toring.dto.request.DecisionWriteDto;
 import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.repository.DecisionBoardRepository;
 import com.cplanet.toring.repository.DecisionChoiceRepository;
 import com.cplanet.toring.repository.DecisionReplyRepository;
 import com.cplanet.toring.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DecisionBoardService {
@@ -42,7 +46,7 @@ public class DecisionBoardService {
     int PER_PAGE = 3;
 
     /**
-     * 결정장애 메인화면 조회
+     * 결정장애 메인화면 게시글 목록 조회
      * @param page
      * @return
      */
@@ -77,30 +81,11 @@ public class DecisionBoardService {
         return responseDto;
     }
 
-
     /**
-     * 결정장애 컨텐츠 등록
-     * @param boardDto
+     * 결정장애 게시글 본문 조회(본문 + 선택 옵션)
+     * @param id
+     * @return
      */
-    @Transactional
-    public void createDecisionBoard(DecisionMainRequestDto boardDto) {
-
-        DecisionBoard board = DecisionBoard.builder()
-                .title(boardDto.getTitle())
-                .contents(boardDto.getContents())
-                .memberId(boardDto.getMemberId())
-                .build();
-
-        boardDto.getOptionText().forEach(c -> {
-            DecisionChoice choice = DecisionChoice.builder()
-                    .optionText(c)
-                    .build();
-            board.addDecisionChoice(choice);
-        });
-        decisionBoardRepository.save(board);
-    }
-
-
     public DecisionDetailResponseDto getDecisionBoardDetail(Long id) {
 
         DecisionBoard board = decisionBoardRepository.findByIdAndAndDisplayStatus_Ok(id).orElse(null);
@@ -120,22 +105,12 @@ public class DecisionBoardService {
         return dto;
     }
 
-    public void createDecisionReply(Long boardId, String comment, Member writer) {
 
-        DecisionReply decisionReply = DecisionReply.builder()
-                .memberId(writer.getId())
-                .comment(comment)
-                // TODO : 프로필에서 가져오도록 수정 필요
-                .nickname("nice_name")
-                .boardId(boardId)
-                .build();
-
-        DecisionReply decisionReply1 = decisionReplyRepository.save(decisionReply);
-
-        System.out.println(decisionReply1);
-
-    }
-
+    /**
+     * 결정장애 게시글 별 댓글 조회
+     * @param boardId
+     * @return
+     */
     public List<DecisionReply> getDecisionBoardReplies(Long boardId) {
 
         List<DecisionReply> replies = decisionReplyRepository.findDecisionRepliesByBoardIdOrderByCreateDate(boardId);
@@ -145,5 +120,88 @@ public class DecisionBoardService {
         });
         return replies;
 
+    }
+
+    /**
+     * 결정장애 게시글 작성 (본문 + 선택 옵션)
+     * @param dto
+     * @return
+     */
+    @Transactional
+    public DecisionBoard writeDecisionBoard(DecisionWriteDto dto) {
+        DecisionBoard savedBoard =  Optional.ofNullable(dto.getDecisionId()).map(d -> {
+            // UPDATE
+            DecisionBoard board = decisionBoardRepository.findById(dto.getDecisionId()).orElse(null);
+            board.setTitle(dto.getTitle());
+            board.setContents(dto.getContents());
+
+            for(int i = 0; i< dto.getOptionText().size() ; i++) {
+                DecisionChoice choice = decisionChoiceRepository.findById(board.getDecisionChoices().get(i).getId()).orElse(null);
+                choice.setOptionText(dto.getOptionText().get(i));
+                board.addDecisionChoice(choice);
+            }
+            return decisionBoardRepository.save(board);
+        }).orElseGet(() -> {
+            DecisionBoard board = DecisionBoard.builder()
+                    .memberId(dto.getMemberId())
+                    .title(dto.getTitle())
+                    .contents(dto.getTitle())
+                    .build();
+
+            dto.getOptionText().forEach(t -> {
+                DecisionChoice decisionChoice = DecisionChoice.builder()
+                        .optionText(t)
+                        .build();
+                board.addDecisionChoice(decisionChoice);
+            });
+            return decisionBoardRepository.save(board);
+        });
+        return savedBoard;
+    }
+
+    /**
+     * 결정장애 댓글 작성/수정
+     * @param reply
+     * @return
+     */
+    public DecisionReply writeDecisionReply(DecisionReply reply) {
+
+        DecisionReply savedReply = Optional.ofNullable(reply.getId()).map(r -> {
+            // UPDATE
+            DecisionReply updatedReply = decisionReplyRepository.findById(r).orElse(null);
+            updatedReply.setComment(reply.getComment());
+            return decisionReplyRepository.save(updatedReply);
+        }).orElseGet(() -> {
+            // INSERT
+            DecisionReply createdReply = DecisionReply.builder()
+                    .comment(reply.getComment())
+                    .nickname(reply.getNickname())
+                    .memberId(reply.getMemberId())
+                    .thumbnail(reply.getThumbnail())
+                    .boardId(reply.getBoardId())
+                    .build();
+            return decisionReplyRepository.save(createdReply);
+        });
+        return savedReply;
+    }
+
+    /**
+     * 결정장애 본문 삭제 처리 (display_status='BLOCK'로 UDPATE 한다.)
+     * @param boardId
+     * @return
+     */
+    public DecisionBoard deleteDecisionBoard(Long boardId) {
+        // display_status='BLOCK'로 UDPATE 한다.
+        DecisionBoard board = decisionBoardRepository.findById(boardId).orElse(null);
+        board.setDisplayStatus(ContentsStatus.BLOCK);
+        return decisionBoardRepository.save(board);
+    }
+
+    /**
+     * 결정장애 게시글 댓글 삭제 처리
+     * @param replyId
+     */
+    public void deleteDecisionReply(Long replyId) {
+        decisionReplyRepository.delete(decisionReplyRepository.findById(replyId).orElse(null));
     }
 }

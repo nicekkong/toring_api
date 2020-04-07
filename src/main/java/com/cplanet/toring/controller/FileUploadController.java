@@ -29,6 +29,7 @@ public class FileUploadController {
             if(!StringUtils.isEmpty(filePath)) {
                 response.setSuccess(true);
                 response.setName(file.getOriginalFilename());
+                response.setType(file.getContentType());
                 response.setPath(filePath);
             } else {
                 response.setSuccess(false);

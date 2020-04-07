@@ -16,9 +16,8 @@ public class MentoringService {
     final static String PREVIEW_SAVE = "01";
     final static String CONTENT_SAVE = "02";
     final static String ATTACH_SAVE = "03";
+    final static String DISPLAY_SAVE = "04";
     final static String CONTENT_STATUS_TEMPORARY = "temporary";
-    final static String CONTENT_STATUS_DISPLAY = "display";
-    final static String CONTENT_STATUS_DELETED = "deleted";
 
     private ContentMapper contentMapper;
     private ModelMapper modelMapper;
@@ -35,8 +34,8 @@ public class MentoringService {
 
         boolean success = false;
 
-        content.setStatus(CONTENT_STATUS_TEMPORARY);
         if (PREVIEW_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 if(content.getId() != null && content.getId() > 0) {
                     contentMapper.updateStartStep1(content);
@@ -52,6 +51,7 @@ public class MentoringService {
             }
         }
         if (CONTENT_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 if(content.getId() != null && content.getId() > 0) {
                     if(content.getPageno() == 1) {
@@ -73,8 +73,20 @@ public class MentoringService {
             }
         }
         if (ATTACH_SAVE.equals(content.getRequesttype())) {
+            content.setStatus(CONTENT_STATUS_TEMPORARY);
             try {
                 contentMapper.updateAttatchStep(content);
+                result.setId(content.getId());
+                success = true;
+            } catch (Exception e) {
+                logger.error("content save/update error - memberId:[{}]", content.getMemberid(), e);
+                result.setSuccess(false);
+                return result;
+            }
+        }
+        if (DISPLAY_SAVE.equals(content.getRequesttype())) {
+            try {
+                contentMapper.updateContentStatus(content);
                 result.setId(content.getId());
                 success = true;
             } catch (Exception e) {

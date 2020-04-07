@@ -29,4 +29,6 @@ public interface ContentMapper {
     int updateStartStep2Page3(ContentRequest content);
 
     int updateAttatchStep(ContentRequest content);
+
+    int updateContentStatus(ContentRequest content);
 }

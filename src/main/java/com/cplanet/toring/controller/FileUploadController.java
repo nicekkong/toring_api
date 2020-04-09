@@ -4,9 +4,7 @@ import com.cplanet.toring.dto.FileUploadResponseDto;
 import com.cplanet.toring.service.S3Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,7 +20,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/upload")
-    public FileUploadResponseDto uploadFile(MultipartFile file) {
+    public FileUploadResponseDto uploadFile(@RequestParam("file") MultipartFile file) {
         FileUploadResponseDto response = new FileUploadResponseDto();
         try {
             String filePath = s3Service.upload(file);

@@ -1,6 +1,7 @@
 package com.cplanet.toring.mapper;
 
 import com.cplanet.toring.domain.Category;
+import com.cplanet.toring.domain.ContentInfo;
 import com.cplanet.toring.dto.request.ContentRequest;
 import com.cplanet.toring.dto.response.ContentResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +32,6 @@ public interface ContentMapper {
     int updateAttatchStep(ContentRequest content);
 
     int updateContentStatus(ContentRequest content);
+
+    List<ContentInfo> selectContentList(long memberid);
 }

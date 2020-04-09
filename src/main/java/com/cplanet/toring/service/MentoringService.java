@@ -1,6 +1,7 @@
 package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.Category;
+import com.cplanet.toring.domain.ContentInfo;
 import com.cplanet.toring.dto.request.ContentRequest;
 import com.cplanet.toring.dto.response.ContentResponse;
 import com.cplanet.toring.mapper.ContentMapper;
@@ -8,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MentoringService {
@@ -114,5 +117,9 @@ public class MentoringService {
             contentInfo = new ContentResponse();
         }
         return contentInfo;
+    }
+
+    public List<ContentInfo> getContentListByauthor(long memberId) {
+        return contentMapper.selectContentList(memberId);
     }
 }

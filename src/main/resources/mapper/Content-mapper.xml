@@ -79,9 +79,15 @@
     <update id="updateAttatchStep" parameterType="com.cplanet.toring.dto.request.ContentRequest">
         update tr_contents
         set
+        <if test="backgroundimage != null">
             background_image = #{backgroundimage},
+        </if>
+        <if test="thumbimage != null">
             thumb_image = #{thumbimage},
+        </if>
+        <if test="attatchmeta != null">
             attatch_meta = #{attatchmeta},
+        </if>
             toring = #{toring},
             update_date = now()
         where id = #{id}

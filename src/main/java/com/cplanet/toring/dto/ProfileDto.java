@@ -1,6 +1,9 @@
 package com.cplanet.toring.dto;
 
+import com.cplanet.toring.domain.ContentInfo;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ProfileDto {
@@ -10,4 +13,5 @@ public class ProfileDto {
     private String nickname;
     private String category;
     private String introduce;
+    private List<ContentInfo> contents;
 }

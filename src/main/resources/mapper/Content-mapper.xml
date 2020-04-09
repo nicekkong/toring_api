@@ -121,4 +121,22 @@
         where id = #{contentid}
     </select>
 
+    <select id="selectContentList" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.ContentInfo">
+        select
+          id,
+          member_id as memberid,
+          title,
+          keyword,
+          category_sub1 as categorysub1,
+          category_sub2 as categorysub2,
+          thumb_image as thumbimage,
+          create_date as createdate,
+          update_date as updatedate,
+          toring,
+          status
+        from tr_contents
+        where member_id = #{memberid}
+        order by createdate desc
+    </select>
+
 </mapper>

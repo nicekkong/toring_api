@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/file")
+@RequestMapping(value = "/api/file")
 public class FileUploadController {
     private S3Service s3Service;
 

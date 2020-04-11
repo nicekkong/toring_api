@@ -1,13 +1,12 @@
-package com.cplanet.toring.dto.request;
+package com.cplanet.toring.dto.response;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Data
-public class ContentRequest {
+public class ContentResponse {
+    private boolean success;
     private Long id;
     private Long memberid;
     private String title;
@@ -28,5 +27,5 @@ public class ContentRequest {
     private LocalDateTime createdate;
     private LocalDateTime updatedate;
     private String requesttype;
-    private Long pageno;
+    private Integer pageno;
 }

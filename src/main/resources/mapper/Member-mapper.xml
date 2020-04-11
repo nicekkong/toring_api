@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cplanet.toring.mapper.MemberMapper">
+    <select id="selectMemberProfile" parameterType="java.lang.Long" resultType="com.cplanet.toring.dto.ProfileDto">
+        select
+          member_id as memberid,
+          thumbnail,
+          mentor_title as mentortitle,
+          nickname,
+          category,
+          introduce
+        from tr_profile
+        where member_id = #{memberId}
+    </select>
+
+    <insert id="insertMemberProfile" parameterType="com.cplanet.toring.dto.ProfileDto">
+        insert into tr_profile (
+          member_id,
+          thumbnail,
+          mentor_title,
+          nickname,
+          category,
+          introduce,
+          create_date
+        ) values (
+          #{memberid},
+          #{thumbnail},
+          #{mentortitle},
+          #{nickname},
+          #{category},
+          #{introduce},
+          now()
+        )
+    </insert>
+
+    <update id="updateMemberProfile" parameterType="com.cplanet.toring.dto.ProfileDto">
+        update tr_profile
+        set
+          thumbnail = #{thumbnail},
+          mentor_title = #{mentortitle},
+          category = #{category},
+          introduce = #{introduce},
+          update_date = now()
+        where member_id = #{memberid}
+    </update>
+</mapper>

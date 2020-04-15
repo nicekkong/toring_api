@@ -20,7 +20,7 @@ public class MyController extends BaseController {
     public ProfileDto getMyProfile() {
         ProfileDto response = null;
         long memberId = this.getMemberInfo().getId();
-        response = memberService.getMemberProfile(memberId);
+        response = memberService.getMemberProfile(memberId, memberId);
         return response;
     }
 

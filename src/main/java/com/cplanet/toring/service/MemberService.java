@@ -30,9 +30,14 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public ProfileDto getMemberProfile(long memberId) {
-        ProfileDto profile = memberMapper.selectMemberProfile(memberId);
-        List<ContentInfo> contents = mentoringService.getContentListByauthor(memberId);
+    public ProfileDto getMemberProfile(Long myId, Long mentorId) {
+        ProfileDto profile = memberMapper.selectMemberProfile(mentorId);
+        List<ContentInfo> contents = mentoringService.getContentListByauthor(mentorId);
+        if(myId != null) {
+            profile.setSubsyn(memberMapper.selectSubscribeYn(myId, mentorId));
+        } else {
+            profile.setSubsyn("N");
+        }
         if(contents != null && contents.size() > 0) {
             profile.setContents(contents);
         }
@@ -47,5 +52,24 @@ public class MemberService {
             result = memberMapper.insertMemberProfile(profile) > 0 ? true : false;
         }
         return result;
+    }
+
+    public List<ProfileDto> getMemberProfileList(String keyword) {
+        List<ProfileDto> profileList = memberMapper.selectMemberProfileList(keyword);
+        return profileList;
+    }
+
+    public boolean requestSubs(Long memberId, Long mentorId, String subsYn) {
+        boolean result = false;
+        if("Y".equals(subsYn)) {
+            result = memberMapper.insertSubscribe(memberId, mentorId) > 0 ? true : false;
+        } else {
+            result = memberMapper.deleteSubscribe(memberId, mentorId) > 0 ? true : false;
+        }
+        return result;
+    }
+
+    public String getSubsYn(long memberId, long mentorId) {
+        return memberMapper.selectSubscribeYn(memberId, mentorId);
     }
 }

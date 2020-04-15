@@ -28,4 +28,5 @@ public class ContentResponse {
     private LocalDateTime updatedate;
     private String requesttype;
     private Integer pageno;
+    private String nickname;
 }

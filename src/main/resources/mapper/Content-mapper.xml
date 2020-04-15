@@ -104,26 +104,27 @@
 
     <select id="selectContentInfo" parameterType="java.lang.Long" resultType="com.cplanet.toring.dto.response.ContentResponse">
         select
-          id,
-          member_id as memberid,
-          title,
-          keyword,
-          category_sub1 as categorysub1,
-          category_sub2 as categorysub2,
-          preview,
-          content,
-          content2,
-          content3,
-          content_tts as contenttts,
-          attatch_meta as attatchmeta,
-          thumb_image as thumbimage,
-          background_image as backgroundimage,
-          toring,
-          status,
-          view_date as viewdate,
-          create_date as createdate,
-          update_date as updatedate
-        from tr_contents
+          a.id,
+          a.member_id as memberid,
+          a.title,
+          a.keyword,
+          a.category_sub1 as categorysub1,
+          a.category_sub2 as categorysub2,
+          a.preview,
+          a.content,
+          a.content2,
+          a.content3,
+          a.content_tts as contenttts,
+          a.attatch_meta as attatchmeta,
+          a.thumb_image as thumbimage,
+          a.background_image as backgroundimage,
+          a.toring,
+          a.status,
+          a.view_date as viewdate,
+          a.create_date as createdate,
+          a.update_date as updatedate,
+          (select nickname from tr_profile where member_id = a.member_id) as nickname
+        from tr_contents a
         where id = #{contentid}
     </select>
 

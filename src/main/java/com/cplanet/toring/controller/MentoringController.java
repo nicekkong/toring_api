@@ -62,7 +62,7 @@ public class MentoringController extends BaseController {
     @GetMapping(value = "profile/list")
     public List<ProfileDto> getProfiles(@RequestParam(value = "keyword") String keyword) {
         List<ProfileDto> response;
-        String searchKeyword = "%"+keyword+"%";
+        String searchKeyword = StringUtils.isEmpty(keyword)? "" : "%"+keyword+"%";
         response = memberService.getMemberProfileList(searchKeyword);
         return response;
     }

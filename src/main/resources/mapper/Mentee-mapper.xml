@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cplanet.toring.mapper.MenteeMapper">
+    <select id="selectMenteeList" parameterType="java.lang.String" resultType="com.cplanet.toring.domain.Mentee">
+      select
+        a.id,
+        a.member_id as memberid,
+        a.title,
+        a.keyword,
+        a.content,
+        a.create_date as createdate,
+        a.update_date as updatedate,
+        (select nickname from tr_profile where member_id = a.member_id) as nickname
+      from tr_mentees a
+      where 1 = 1
+      <if test="keyword != null and keyword != ''">
+        and a.keyword like #{keyword}
+      </if>
+      order by a.create_date desc
+    </select>
+    <select id="selectMenteeDetail" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.Mentee">
+      select
+        a.id,
+        a.member_id as memberid,
+        a.title,
+        a.keyword,
+        a.content,
+        a.create_date as createdate,
+        a.update_date as updatedate,
+        (select nickname from tr_profile where member_id = a.member_id) as nickname
+      from tr_mentees a
+      where a.id = #{id}
+    </select>
+    <insert id="insertMentee" parameterType="com.cplanet.toring.domain.Mentee">
+        insert into tr_mentees (
+          title,
+          content,
+          keyword,
+          member_id,
+          create_date,
+          update_date
+        ) values (
+          #{title},
+          #{content},
+          #{keyword},
+          #{memberid},
+          now(),
+          now()
+        )
+    </insert>
+
+    <update id="updateMentee" parameterType="com.cplanet.toring.domain.Mentee">
+      update tr_mentees
+      set title = #{title},
+          keyword = #{keyword},
+          content = #{content},
+          update_date = now()
+      where id = #{id}
+      and member_id = #{memberid}
+    </update>
+
+    <delete id="deleteMentee" parameterType="java.lang.Long">
+        delete from tr_mentees
+        where id = #{param1}
+      and member_id = #{param2}
+    </delete>
+
+</mapper>

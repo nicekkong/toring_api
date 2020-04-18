@@ -32,11 +32,14 @@ permitAllUrls:
 cloud:
   aws:
     credentials:
-      accessKey: AKIAJUFPOBHXMCTZKEPQ
-      secretKey: 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
+      accessKey: AKIAIWF5WR4PHHJRWVHA
+      secretKey: 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
     s3:
-      bucket: toringfile
+      bucket: toringcontent
     region:
       static: ap-northeast-2
     stack:
       auto: false
+
+
+

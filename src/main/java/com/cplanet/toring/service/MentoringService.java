@@ -122,4 +122,5 @@ public class MentoringService {
     public List<ContentInfo> getContentListByauthor(long memberId) {
         return contentMapper.selectContentList(memberId);
     }
+
 }

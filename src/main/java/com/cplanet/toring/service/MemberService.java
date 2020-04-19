@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -71,5 +72,10 @@ public class MemberService {
 
     public String getSubsYn(long memberId, long mentorId) {
         return memberMapper.selectSubscribeYn(memberId, mentorId);
+    }
+
+    public Member getMemberInfo(Long memberId) {
+        Optional<Member> optMember = memberRepository.findById(memberId);
+        return optMember.orElse(null);
     }
 }

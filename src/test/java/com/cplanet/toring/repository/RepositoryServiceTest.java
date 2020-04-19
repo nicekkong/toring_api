@@ -143,7 +143,7 @@ public class RepositoryServiceTest {
                 .optionText(Arrays.asList("11111", "22222"))
                 .build();
 
-        decisionBoardService.createDecisionBoard(dto);
+//        decisionBoardService.createDecisionBoard(dto);
 
     }
 
@@ -160,7 +160,7 @@ public class RepositoryServiceTest {
 
         Member member = memberRepository.findById(2L).orElse(null);
 
-        decisionBoardService.createDecisionReply(9L,"이건 뭐지??", member);
+//        decisionBoardService.createDecisionReply(9L,"이건 뭐지??", member);
     }
 
     @Test

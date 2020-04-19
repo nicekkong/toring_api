@@ -14,7 +14,7 @@ public class DecisionWriteDto {
     private String title;
     private String contents;
     @Builder.Default
-    private List<String> optionText = new ArrayList<>();
+    private List<String> options = new ArrayList<>();
     @Builder.Default
     private Long decisionId = null;
 }

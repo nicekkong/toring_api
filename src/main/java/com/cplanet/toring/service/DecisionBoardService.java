@@ -2,18 +2,17 @@ package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.DecisionChoice;
+import com.cplanet.toring.domain.DecisionDupCheck;
 import com.cplanet.toring.domain.DecisionReply;
-import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.domain.enums.ContentsStatus;
-import com.cplanet.toring.dto.request.DecisionMainRequestDto;
 import com.cplanet.toring.dto.request.DecisionWriteDto;
 import com.cplanet.toring.dto.response.DecisionDetailResponseDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
 import com.cplanet.toring.repository.DecisionBoardRepository;
 import com.cplanet.toring.repository.DecisionChoiceRepository;
+import com.cplanet.toring.repository.DecisionDupCheckRepository;
 import com.cplanet.toring.repository.DecisionReplyRepository;
 import com.cplanet.toring.utils.DateUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -33,13 +32,19 @@ public class DecisionBoardService {
     final private DecisionBoardRepository decisionBoardRepository;
     final private DecisionChoiceRepository decisionChoiceRepository;
     final private DecisionReplyRepository decisionReplyRepository;
+    final private MemberService memberService;
+    final private DecisionDupCheckRepository decisionDupCheckRepository;
 
     public DecisionBoardService(DecisionBoardRepository decisionBoardRepository
             , DecisionChoiceRepository decisionChoiceRepository
-            , DecisionReplyRepository decisionReplyRepository) {
+            , DecisionReplyRepository decisionReplyRepository
+            , MemberService memberService
+            , DecisionDupCheckRepository decisionDupCheckRepository) {
         this.decisionBoardRepository = decisionBoardRepository;
         this.decisionChoiceRepository = decisionChoiceRepository;
         this.decisionReplyRepository = decisionReplyRepository;
+        this.memberService = memberService;
+        this.decisionDupCheckRepository = decisionDupCheckRepository;
     }
 
     // TODO : 메인 페이지에서 조회되는 갯수 수정
@@ -86,21 +91,29 @@ public class DecisionBoardService {
      * @param id
      * @return
      */
-    public DecisionDetailResponseDto getDecisionBoardDetail(Long id) {
+    public DecisionDetailResponseDto getDecisionBoardDetail(Long id, Long memberId) {
 
         DecisionBoard board = decisionBoardRepository.findByIdAndAndDisplayStatus_Ok(id).orElse(null);
 
+        Long writerId = board.getMemberId();
         DecisionDetailResponseDto dto = DecisionDetailResponseDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
-                .nickName("nick_name")
-                .memberId(board.getMemberId())
+                .nickName(memberService.getMemberInfo(writerId).getProfile().getNickname())
+                .memberId(writerId)
                 .createTime(DateUtils.toHumanizeDateTime(board.getCreateDate()))
                 .contents(board.getContents())
                 .answer01(board.getDecisionChoices().get(0).getOptionText())
-                .answer02(board.getDecisionChoices().get(1).getOptionText())
+                .answerId01(board.getDecisionChoices().get(0).getId())
                 .count01(board.getDecisionChoices().get(0).getCount())
+                .answer02(board.getDecisionChoices().get(1).getOptionText())
+                .answerId02(board.getDecisionChoices().get(1).getId())
+                .count02(board.getDecisionChoices().get(1).getCount())
                 .build();
+
+        if(memberId != null && decisionDupCheckRepository.existsByBoardIdAndMemberId(id, memberId)) {
+            dto.setIsResponsed(true);
+        }
 
         return dto;
     }
@@ -135,25 +148,26 @@ public class DecisionBoardService {
             board.setTitle(dto.getTitle());
             board.setContents(dto.getContents());
 
-            for(int i = 0; i< dto.getOptionText().size() ; i++) {
+            for(int i = 0; i< dto.getOptions().size() ; i++) {
                 DecisionChoice choice = decisionChoiceRepository.findById(board.getDecisionChoices().get(i).getId()).orElse(null);
-                choice.setOptionText(dto.getOptionText().get(i));
+                choice.setOptionText(dto.getOptions().get(i));
                 board.addDecisionChoice(choice);
             }
             return decisionBoardRepository.save(board);
         }).orElseGet(() -> {
+            // INSERT
             DecisionBoard board = DecisionBoard.builder()
                     .memberId(dto.getMemberId())
                     .title(dto.getTitle())
-                    .contents(dto.getTitle())
+                    .contents(dto.getContents())
                     .build();
 
-            dto.getOptionText().forEach(t -> {
+            for(int i = 0 ; i < dto.getOptions().size() ; i++) {
                 DecisionChoice decisionChoice = DecisionChoice.builder()
-                        .optionText(t)
+                        .optionText(dto.getOptions().get(i))
                         .build();
                 board.addDecisionChoice(decisionChoice);
-            });
+            }
             return decisionBoardRepository.save(board);
         });
         return savedBoard;
@@ -203,5 +217,37 @@ public class DecisionBoardService {
      */
     public void deleteDecisionReply(Long replyId) {
         decisionReplyRepository.delete(decisionReplyRepository.findById(replyId).orElse(null));
+    }
+
+
+    /**
+     * 결정장애 선택 시 저장, 카운트를 UPDATE하고, 중복 체크 테이블도 함께 INSERT를 한다.
+     * @param boardId
+     * @param memberId
+     * @param choiceId
+     */
+    @Transactional
+    public void selectDecisionChoice(Long boardId, Long memberId, Long choiceId) {
+        decisionChoiceRepository.updateDecisionChoiceCount(choiceId);
+        saveForDupCheck(boardId, memberId, choiceId);
+    }
+
+    /**
+     * 결정장애 중복 체크를 위한 사용자별/게시글 별 로그 추가
+     * @param boardId
+     * @param memberId
+     * @param choiceId
+     */
+    private void saveForDupCheck(Long boardId, Long memberId, Long choiceId) {
+
+        DecisionDupCheck dupCheck = DecisionDupCheck.builder()
+                .boardId(boardId)
+                .memberId(memberId)
+                .choiceId(choiceId)
+                .build();
+
+        decisionDupCheckRepository.save(dupCheck);
+
+
     }
 }

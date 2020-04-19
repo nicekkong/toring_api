@@ -26,7 +26,6 @@ public class DecisionChoice extends AuditEntity {
 
     @ManyToOne
     @JoinColumn(name="board_id", nullable = false) // inner join
-//    @JoinColumn(name="board_id", referencedColumnName = "board_id")
     private DecisionBoard decisionBoard;
 
     public void setDecisionBoard(DecisionBoard decisionBoard) {

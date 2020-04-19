@@ -12,8 +12,20 @@ public class DecisionDetailResponseDto {
     private Long memberId;
     private String createTime;
     private String contents;
+    private Long answerId01;
     private String answer01;
     private int count01;
+    private Long answerId02;
     private String answer02;
     private int count02;
+    @Builder.Default
+    private boolean isResponsed = false;
+
+    public boolean getIsResponsed() {
+        return isResponsed;
+    }
+
+    public void setIsResponsed(boolean responsed) {
+        isResponsed = responsed;
+    }
 }

@@ -1,6 +1,7 @@
 package com.cplanet.toring.controller;
 
 import com.cplanet.toring.domain.Mentee;
+import com.cplanet.toring.domain.MenteeReply;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.CategoryDto;
 import com.cplanet.toring.dto.ProfileDto;
@@ -57,5 +58,24 @@ public class MenteeController extends BaseController {
     @PostMapping(value = "delete")
     public ApiResponse deleteMentee(@RequestParam(value = "id") Long id) {
         return menteeService.deleteMentee(id, this.getMemberInfo().getId());
+    }
+
+    @PostMapping(value = "reply/save")
+    public ApiResponse saveMenteeReply(@RequestBody MenteeReply menteeReply) {
+        menteeReply.setMenteeid(this.getMemberInfo().getId());
+        if(StringUtils.isEmpty(menteeReply.getMemberid())) {
+            throw new UnauthorizedException("mentee/save > memberId is not recognized");
+        }
+        return menteeService.saveMenteeReply(menteeReply);
+    }
+
+    @PostMapping(value = "reply/update")
+    public ApiResponse updateMenteeReply(@RequestBody MenteeReply menteeReply) {
+        return menteeService.updateMenteeReply(menteeReply);
+    }
+
+    @PostMapping(value = "reply/delete")
+    public ApiResponse deleteMenteeReply(@RequestParam(value = "id") Long id) {
+        return menteeService.deleteMenteeReply(id);
     }
 }

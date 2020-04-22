@@ -65,4 +65,45 @@
       and member_id = #{param2}
     </delete>
 
+    <select id="selectMenteeReplyList" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.MenteeReply">
+        select
+        a.id,
+        a.member_id as memberid,
+        a.mentee_id as menteeid,
+        a.content,
+        a.create_date as createdate,
+        a.update_date as updatedate
+        from tr_mentee_reply
+        where 1 = 1
+        order by a.create_date desc
+    </select>
+
+    <insert id="insertMenteeReply" parameterType="com.cplanet.toring.domain.MenteeReply">
+        insert into tr_mentee_reply (
+          content,
+          member_id,
+          mentee_id,
+          create_date,
+          update_date
+        ) values (
+          #{content},
+          #{memberid},
+          #{menteeid},
+          now(),
+          now()
+        )
+    </insert>
+
+    <update id="updateMenteeReply" parameterType="com.cplanet.toring.domain.MenteeReply">
+      update tr_mentee_reply
+      set content = #{content},
+          update_date = now()
+      where id = #{id}
+    </update>
+
+    <delete id="deleteMenteeReply" parameterType="java.lang.Long">
+        delete from tr_mentee_reply
+        where id = #{param1}
+    </delete>
+
 </mapper>

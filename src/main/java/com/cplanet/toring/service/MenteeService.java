@@ -32,7 +32,7 @@ public class MenteeService {
     public List<Mentee> getMenteeList(String keyword, Long pageNo) {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", keyword);
-        param.put("pageno", pageNo);
+        param.put("start", getStartNo(pageNo, 6));
         param.put("pagecount", 6);
         return menteeMapper.selectMenteeList(param);
     }
@@ -82,8 +82,12 @@ public class MenteeService {
     public List<MenteeReply> getMenteeReplyList(Long menteeId, Long pageNo) {
         Map<String, Object> param = new HashMap<>();
         param.put("menteeid", menteeId);
-        param.put("pageno", pageNo);
+        param.put("start", getStartNo(pageNo, 2));
         param.put("pagecount", 2);
         return menteeMapper.selectMenteeReplyList(param);
+    }
+
+    private Long getStartNo(Long pageNo, int pageCount) {
+        return (pageNo-1) * pageCount;
     }
 }

@@ -31,9 +31,10 @@ public class MenteeController extends BaseController {
     }
 
     @GetMapping(value = "list")
-    public List<Mentee> getMenteeList(@RequestParam(value = "keyword") String keyword) {
+    public List<Mentee> getMenteeList(@RequestParam(value = "keyword") String keyword,
+                                      @RequestParam(value = "pageNo") Long pageNo) {
         String searchKeyword = StringUtils.isEmpty(keyword)? "" : "%"+keyword+"%";
-        return menteeService.getMenteeList(searchKeyword);
+        return menteeService.getMenteeList(searchKeyword, pageNo);
     }
 
     @GetMapping(value = "detail")
@@ -55,20 +56,19 @@ public class MenteeController extends BaseController {
         return menteeService.updateMentee(mentee);
     }
 
-    @PostMapping(value = "delete")
+    @GetMapping(value = "delete")
     public ApiResponse deleteMentee(@RequestParam(value = "id") Long id) {
         return menteeService.deleteMentee(id, this.getMemberInfo().getId());
     }
 
     @GetMapping(value = "reply/list")
-    public List<Mentee> getMenteeReplyList(@RequestParam(value = "id") Long menteeId,
+    public List<MenteeReply> getMenteeReplyList(@RequestParam(value = "id") Long menteeId,
                                            @RequestParam(value = "pageNo") Long pageNo) {
         return menteeService.getMenteeReplyList(menteeId, pageNo);
     }
 
     @PostMapping(value = "reply/save")
     public ApiResponse saveMenteeReply(@RequestBody MenteeReply menteeReply) {
-        menteeReply.setMenteeid(this.getMemberInfo().getId());
         if(StringUtils.isEmpty(menteeReply.getMemberid())) {
             throw new UnauthorizedException("mentee/save > memberId is not recognized");
         }

@@ -9,9 +9,11 @@ import java.util.Date;
 @Accessors(chain = true)
 public class MenteeReply {
     private Long id;
-    private Long memberid;
     private Long menteeid;
+    private Long memberid;
     private String content;
     private Date createdate;
     private Date updatedate;
+    private String nickname;
+    private String thumbnail;
 }

@@ -60,6 +60,12 @@ public class MenteeController extends BaseController {
         return menteeService.deleteMentee(id, this.getMemberInfo().getId());
     }
 
+    @GetMapping(value = "reply/list")
+    public List<Mentee> getMenteeReplyList(@RequestParam(value = "id") Long menteeId,
+                                           @RequestParam(value = "pageNo") Long pageNo) {
+        return menteeService.getMenteeReplyList(menteeId, pageNo);
+    }
+
     @PostMapping(value = "reply/save")
     public ApiResponse saveMenteeReply(@RequestBody MenteeReply menteeReply) {
         menteeReply.setMenteeid(this.getMemberInfo().getId());

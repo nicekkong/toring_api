@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cplanet.toring.mapper.MenteeMapper">
-    <select id="selectMenteeList" parameterType="java.lang.String" resultType="com.cplanet.toring.domain.Mentee">
+    <select id="selectMenteeList" parameterType="map" resultType="com.cplanet.toring.domain.Mentee">
       select
         a.id,
         a.member_id as memberid,
@@ -17,6 +17,9 @@
         and a.keyword like #{keyword}
       </if>
       order by a.create_date desc
+      <if test="pageno != null">
+          limit (#{pageno}-1) * #{pagecount}, #{pagecount}
+      </if>
     </select>
     <select id="selectMenteeDetail" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.Mentee">
       select
@@ -65,17 +68,21 @@
       and member_id = #{param2}
     </delete>
 
-    <select id="selectMenteeReplyList" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.MenteeReply">
+    <select id="selectMenteeReplyList" parameterType="map" resultType="com.cplanet.toring.domain.MenteeReply">
         select
-        a.id,
-        a.member_id as memberid,
-        a.mentee_id as menteeid,
-        a.content,
-        a.create_date as createdate,
-        a.update_date as updatedate
+            id,
+            member_id as memberid,
+            mentee_id as menteeid,
+            content,
+            create_date as createdate,
+            update_date as updatedate
         from tr_mentee_reply
         where 1 = 1
-        order by a.create_date desc
+        and mentee_id = #{menteeid}
+        order by create_date desc
+        <if test="pageno != null">
+            limit (#{pageno}-1) * #{pagecount}, #{pagecount}
+        </if>
     </select>
 
     <insert id="insertMenteeReply" parameterType="com.cplanet.toring.domain.MenteeReply">

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -14,7 +15,7 @@ public interface MenteeMapper {
 
     Mentee selectMenteeDetail(long id);
 
-    List<Mentee> selectMenteeList(String keyword);
+    List<Mentee> selectMenteeList(Map<String, Object> param);
 
     int insertMentee(Mentee mentee);
 
@@ -27,4 +28,6 @@ public interface MenteeMapper {
     int updateMenteeReply(MenteeReply menteeReply);
 
     int deleteMenteeReply(Long id);
+
+    List<MenteeReply> selectMenteeReplyList(Map<String, Object> param);
 }

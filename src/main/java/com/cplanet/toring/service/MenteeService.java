@@ -12,7 +12,9 @@ import com.cplanet.toring.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MenteeService {
@@ -27,8 +29,12 @@ public class MenteeService {
         return menteeMapper.selectMenteeDetail(id);
     }
 
-    public List<Mentee> getMenteeList(String keyword) {
-        return menteeMapper.selectMenteeList(keyword);
+    public List<Mentee> getMenteeList(String keyword, Long pageNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("keyword", keyword);
+        param.put("pageno", pageNo);
+        param.put("pagecount", 6);
+        return menteeMapper.selectMenteeList(param);
     }
 
     public ApiResponse saveMentee(Mentee mentee) {
@@ -71,5 +77,13 @@ public class MenteeService {
     public ApiResponse deleteMenteeReply(Long id) {
         boolean result = menteeMapper.deleteMenteeReply(id) > 0? true : false;
         return new ApiResponse(result, result? "삭제 완료" : "삭제 실패");
+    }
+
+    public List<MenteeReply> getMenteeReplyList(Long menteeId, Long pageNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("menteeid", menteeId);
+        param.put("pageno", pageNo);
+        param.put("pagecount", 2);
+        return menteeMapper.selectMenteeReplyList(param);
     }
 }

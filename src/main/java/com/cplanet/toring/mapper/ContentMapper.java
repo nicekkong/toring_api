@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -34,4 +35,6 @@ public interface ContentMapper {
     int updateContentStatus(ContentRequest content);
 
     List<ContentInfo> selectContentList(long memberid);
+
+    List<ContentInfo> selectContentListByKeyword(Map<String, Object> param);
 }

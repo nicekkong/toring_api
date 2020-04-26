@@ -1,5 +1,6 @@
 package com.cplanet.toring.controller;
 
+import com.cplanet.toring.domain.ContentInfo;
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
 import com.cplanet.toring.dto.ApiResponse;
@@ -25,9 +26,11 @@ import java.util.List;
 public class MenteeController extends BaseController {
 
     private MenteeService menteeService;
+    private MentoringService mentoringService;
 
-    public MenteeController(MenteeService menteeService) {
+    public MenteeController(MenteeService menteeService, MentoringService mentoringService) {
         this.menteeService = menteeService;
+        this.mentoringService = mentoringService;
     }
 
     @GetMapping(value = "list")
@@ -80,8 +83,13 @@ public class MenteeController extends BaseController {
         return menteeService.updateMenteeReply(menteeReply);
     }
 
-    @PostMapping(value = "reply/delete")
+    @GetMapping(value = "reply/delete")
     public ApiResponse deleteMenteeReply(@RequestParam(value = "id") Long id) {
         return menteeService.deleteMenteeReply(id);
+    }
+
+    @GetMapping(value = "content/list")
+    public List<ContentInfo> getContentList(@RequestParam(value = "keyword") String keyword) {
+        return mentoringService.getContentListByKeyword(keyword);
     }
 }

@@ -146,4 +146,36 @@
         order by createdate desc
     </select>
 
+    <select id="selectContentListByKeyword" parameterType="java.util.Map" resultType="com.cplanet.toring.domain.ContentInfo">
+        select
+        a.id,
+        a.member_id as memberid,
+        a.title,
+        a.keyword,
+        a.category_sub1 as categorysub1,
+        a.category_sub2 as categorysub2,
+        a.thumb_image as thumbimage,
+        a.create_date as createdate,
+        a.update_date as updatedate,
+        a.toring,
+        a.status,
+        (select nickname from tr_profile where member_id = a.member_id) as nickname
+        from tr_contents a
+        <if test="keyword1 != null">
+        where a.title like #{keyword1}
+        </if>
+        <if test="keyword2 != null">
+            or a.title like #{keyword2}
+        </if>
+        <if test="keyword3 != null">
+            or a.title like #{keyword3}
+        </if>
+        <if test="keyword4 != null">
+            or a.title like #{keyword4}
+        </if>
+        <if test="keyword5 != null">
+            or a.title like #{keyword5}
+        </if>
+        order by createdate desc
+    </select>
 </mapper>

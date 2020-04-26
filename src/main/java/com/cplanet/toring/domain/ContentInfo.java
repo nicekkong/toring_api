@@ -19,4 +19,5 @@ public class ContentInfo {
     private LocalDateTime updatedate;
     private Float toring;
     private String status;
+    private String nickname;
 }

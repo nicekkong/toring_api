@@ -119,7 +119,7 @@ public class MentoringService {
         return contentInfo;
     }
 
-    public List<ContentInfo> getContentListByauthor(long memberId) {
+    public List<ContentInfo> getContentListByAuthor(long memberId) {
         return contentMapper.selectContentList(memberId);
     }
 

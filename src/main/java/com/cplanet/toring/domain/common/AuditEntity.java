@@ -31,7 +31,7 @@ public class AuditEntity {
 
     /**
      * createDate와 updateDate는 LocalDateTime 형식이라 JSON으로 표현하기엔 부적합 하다.
-     * 따러서, Entity의 생성일, 수정일은 별도의 created, updated 필드를 DateUtils method를 통해 변환하여 제공한다.
+     * 따러서, Entity의 생성일, 수정일은 별도의 created, updated 필드를 DateUtils methode를 통해 변환하여 제공한다.
      */
     @Transient
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

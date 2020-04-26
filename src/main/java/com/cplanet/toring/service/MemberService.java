@@ -33,7 +33,7 @@ public class MemberService {
 
     public ProfileDto getMemberProfile(Long myId, Long mentorId) {
         ProfileDto profile = memberMapper.selectMemberProfile(mentorId);
-        List<ContentInfo> contents = mentoringService.getContentListByauthor(mentorId);
+        List<ContentInfo> contents = mentoringService.getContentListByAuthor(mentorId);
         if(myId != null) {
             profile.setSubsyn(memberMapper.selectSubscribeYn(myId, mentorId));
         } else {

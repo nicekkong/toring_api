@@ -2,18 +2,25 @@ package com.cplanet.toring.controller;
 
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.ProfileDto;
+import com.cplanet.toring.dto.response.ContentsAndReviewResponseDto;
 import com.cplanet.toring.service.MemberService;
+import com.cplanet.toring.service.MyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping(value = {"/api/my"})
 public class MyController extends BaseController {
-    private MemberService memberService;
+    final private MemberService memberService;
+    final private MyService myService;
 
-    public MyController(MemberService memberService) {
+    public MyController(MemberService memberService, MyService myService) {
         this.memberService = memberService;
+        this.myService = myService;
     }
 
     @GetMapping(value = "profile")
@@ -33,5 +40,15 @@ public class MyController extends BaseController {
             message = "fail";
         }
         return new ApiResponse(result, message);
+    }
+
+    @GetMapping(value="/posts")
+    public ResponseEntity getMyAllHistories() {
+
+        Long memberId = this.getMemberId();
+        List<ContentsAndReviewResponseDto> result =  myService.getMyAllPostAndReviews(memberId);
+
+        return ResponseEntity.ok(result);
+
     }
 }

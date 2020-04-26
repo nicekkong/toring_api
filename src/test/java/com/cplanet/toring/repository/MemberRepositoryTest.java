@@ -23,6 +23,12 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private ContentsRepository contentsRepository;
+
+    @Autowired
+    private ContentsReviewRepository contentsReviewRepository;
+
     @Test
     public void memberSaveTest() {
 
@@ -49,5 +55,14 @@ public class MemberRepositoryTest {
                 m -> System.out.println(m.getName())
         );
 
+    }
+
+
+    @Test
+    public void selectContents() {
+//        contentsRepository.findAll().forEach(System.out::println);
+
+        System.out.println(contentsReviewRepository.findById(3L).get());
+        contentsReviewRepository.findAllByMemberIdOrderByCreateDateDesc(1L).forEach(System.out::println);
     }
 }

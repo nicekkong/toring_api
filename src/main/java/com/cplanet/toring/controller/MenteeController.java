@@ -89,7 +89,10 @@ public class MenteeController extends BaseController {
     }
 
     @GetMapping(value = "content/list")
-    public List<ContentInfo> getContentList(@RequestParam(value = "keyword") String keyword) {
-        return mentoringService.getContentListByKeyword(keyword);
+    public List<ContentInfo> getContentList(@RequestParam(value = "keyword") String keyword,
+                                            @RequestParam(value = "pageNo", defaultValue = "1") Long pageNo,
+                                            @RequestParam(value = "pageCount", defaultValue = "24") int pageCount,
+                                            @RequestParam(value = "type", defaultValue = "new") String type) {
+        return mentoringService.getContentListByKeyword(keyword, pageNo, pageCount, type);
     }
 }

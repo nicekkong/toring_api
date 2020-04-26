@@ -159,23 +159,50 @@
         a.update_date as updatedate,
         a.toring,
         a.status,
-        (select nickname from tr_profile where member_id = a.member_id) as nickname
+        (select nickname from tr_profile where member_id = a.member_id) as nickname,
+        (select count(1) from tr_purchase_history where contents_id = a.id) as totalcount,
+        (select count(1) from tr_purchase_history where contents_id = a.id and create_date > date_add(now(), interval -7 day)) as currentcount
         from tr_contents a
+        where a.status = 'display'
         <if test="keyword1 != null">
-        where a.title like #{keyword1}
+            and a.title like #{keyword1}
+            or a.keyword like #{keyword1}
+            or a.content like #{keyword1}
         </if>
         <if test="keyword2 != null">
             or a.title like #{keyword2}
+            or a.keyword like #{keyword2}
+            or a.content like #{keyword2}
         </if>
         <if test="keyword3 != null">
             or a.title like #{keyword3}
+            or a.keyword like #{keyword3}
+            or a.content like #{keyword3}
         </if>
         <if test="keyword4 != null">
             or a.title like #{keyword4}
+            or a.keyword like #{keyword4}
+            or a.content like #{keyword4}
         </if>
         <if test="keyword5 != null">
             or a.title like #{keyword5}
+            or a.keyword like #{keyword5}
+            or a.content like #{keyword5}
         </if>
-        order by createdate desc
+        <if test='type != null and type.equals("popular")'>
+          order by totalcount desc, createdate desc
+        </if>
+        <if test='type != null and type.equals("increase")'>
+          order by currentcount desc, createdate desc
+        </if>
+        <if test='type != null and type.equals("new")'>
+          order by createdate desc
+        </if>
+        <if test='type == null'>
+            order by createdate desc
+        </if>
+        <if test="start != null">
+            limit #{start}, #{pagecount}
+        </if>
     </select>
 </mapper>

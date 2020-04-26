@@ -17,14 +17,19 @@
     </select>
     <select id="selectMemberProfileList" parameterType="java.lang.String" resultType="com.cplanet.toring.dto.ProfileDto">
         select
-        member_id as memberid,
-        thumbnail,
-        mentor_title as mentortitle,
-        nickname,
-        category,
-        introduce
-        from tr_profile
-        where category like #{keyword}
+        a.member_id as memberid,
+        a.thumbnail,
+        a.mentor_title as mentortitle,
+        a.nickname,
+        a.category,
+        a.introduce,
+        (select count(1) from tr_my_mentor where mentor_id = memberid) as subscount
+        from tr_profile a
+        where 1 = 1
+        <if test="keyword != null and keyword != ''">
+          and category like #{keyword}
+        </if>
+        order by subscount desc
     </select>
     <insert id="insertMemberProfile" parameterType="com.cplanet.toring.dto.ProfileDto">
         insert into tr_profile (

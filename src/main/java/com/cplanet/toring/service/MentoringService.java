@@ -9,8 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MentoringService {
@@ -123,4 +126,26 @@ public class MentoringService {
         return contentMapper.selectContentList(memberId);
     }
 
+    public List<ContentInfo> getContentListByKeyword(String keyword, Long pageNo, int pageCount, String type) {
+        String[] keywords = keyword.split("#");
+        Map<String, Object> param = new HashMap<>();
+        for(int i = 0; i < keywords.length; i++) {
+            if(!StringUtils.isEmpty(keywords[i])) {
+                param.put("keyword"+(i), "%"+keywords[i]+"%");
+            }
+        }
+        param.put("type", type);
+        param.put("start", getStartNo(pageNo, pageCount));
+        param.put("pagecount", pageCount);
+
+        List<ContentInfo> contentList = contentMapper.selectContentListByKeyword(param);
+        if(contentList.size() == 0) {
+            contentList = contentMapper.selectContentListByKeyword(null);
+        }
+        return contentList;
+    }
+
+    private Long getStartNo(Long pageNo, int pageCount) {
+        return (pageNo-1) * pageCount;
+    }
 }

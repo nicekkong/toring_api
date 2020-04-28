@@ -18,4 +18,6 @@ public interface DecisionBoardRepository extends JpaRepository<DecisionBoard, Lo
     @Query("SELECT b FROM DecisionBoard b JOIN FETCH b.decisionChoices WHERE b.displayStatus='OK' AND b.id = :id")
     Optional<DecisionBoard> findByIdAndAndDisplayStatus_Ok(Long id);
 
+    Page<DecisionBoard> findAllByMemberIdAndDisplayStatusAndIdAndDisplayStatus_OkOrderByCreateDateDesc(Long memberId, Pageable page);
+
 }

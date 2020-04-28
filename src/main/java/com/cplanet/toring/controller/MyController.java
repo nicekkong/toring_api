@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping(value = {"/api/my"})
@@ -43,10 +41,11 @@ public class MyController extends BaseController {
     }
 
     @GetMapping(value="/posts")
-    public ResponseEntity getMyAllHistories() {
+    public ResponseEntity getMyAllHistories(@RequestParam(value="type") String type,
+                                            @RequestParam(value="page",required = false, defaultValue = "0")int page) {
 
         Long memberId = this.getMemberId();
-        List<ContentsAndReviewResponseDto> result =  myService.getMyAllPostAndReviews(memberId);
+        ContentsAndReviewResponseDto result =  myService.getMyPostAndReviewsByType(memberId, type, page);
 
         return ResponseEntity.ok(result);
 

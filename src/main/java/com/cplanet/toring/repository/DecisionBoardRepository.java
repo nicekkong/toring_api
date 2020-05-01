@@ -1,6 +1,7 @@
 package com.cplanet.toring.repository;
 
 import com.cplanet.toring.domain.DecisionBoard;
+import com.cplanet.toring.domain.enums.ContentsStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +18,9 @@ public interface DecisionBoardRepository extends JpaRepository<DecisionBoard, Lo
 
     @Query("SELECT b FROM DecisionBoard b JOIN FETCH b.decisionChoices WHERE b.displayStatus='OK' AND b.id = :id")
     Optional<DecisionBoard> findByIdAndAndDisplayStatus_Ok(Long id);
+
+    Page<DecisionBoard> findAllByMemberIdAndDisplayStatusOrderByCreateDateDesc(Long memberId, ContentsStatus status, Pageable page);
+
+//    DecisionBoard findAllByDisplayStatus_
 
 }

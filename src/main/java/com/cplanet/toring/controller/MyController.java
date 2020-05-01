@@ -2,18 +2,23 @@ package com.cplanet.toring.controller;
 
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.ProfileDto;
+import com.cplanet.toring.dto.response.ContentsAndReviewResponseDto;
 import com.cplanet.toring.service.MemberService;
+import com.cplanet.toring.service.MyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping(value = {"/api/my"})
 public class MyController extends BaseController {
-    private MemberService memberService;
+    final private MemberService memberService;
+    final private MyService myService;
 
-    public MyController(MemberService memberService) {
+    public MyController(MemberService memberService, MyService myService) {
         this.memberService = memberService;
+        this.myService = myService;
     }
 
     @GetMapping(value = "profile")
@@ -33,5 +38,22 @@ public class MyController extends BaseController {
             message = "fail";
         }
         return new ApiResponse(result, message);
+    }
+
+    @GetMapping(value="/contents")
+    public ResponseEntity<?> getMyContents(@RequestParam(value="page", defaultValue = "0")int page){
+        return ResponseEntity.ok(myService.getMyContents(this.getMemberId(), page));
+    }
+
+
+    @GetMapping(value="/posts")
+    public ResponseEntity getMyAllHistories(@RequestParam(value="type") String type,
+                                            @RequestParam(value="page",required = false, defaultValue = "0")int page) {
+
+        Long memberId = this.getMemberId();
+        ContentsAndReviewResponseDto result =  myService.getMyPostAndReviewsByType(memberId, type, page);
+
+        return ResponseEntity.ok(result);
+
     }
 }

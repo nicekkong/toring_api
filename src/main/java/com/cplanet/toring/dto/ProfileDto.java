@@ -14,6 +14,7 @@ public class ProfileDto {
     private String category;
     private String introduce;
     private List<ContentInfo> contents;
+    private boolean hasNextContents;
     private int subscount;
     private int mentorcount;
     private int purchasecount;

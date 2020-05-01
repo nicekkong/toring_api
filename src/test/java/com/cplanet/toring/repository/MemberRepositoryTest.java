@@ -63,6 +63,6 @@ public class MemberRepositoryTest {
 //        contentsRepository.findAll().forEach(System.out::println);
 
         System.out.println(contentsReviewRepository.findById(3L).get());
-        contentsReviewRepository.findAllByMemberIdOrderByCreateDateDesc(1L).forEach(System.out::println);
+        //contentsReviewRepository.findAllByMemberIdOrderByCreateDateDesc(1L).forEach(System.out::println);
     }
 }

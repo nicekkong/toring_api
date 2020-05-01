@@ -1,13 +1,19 @@
 package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.ContentInfo;
+import com.cplanet.toring.domain.Contents;
 import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.dto.ProfileDto;
 import com.cplanet.toring.mapper.MemberMapper;
+import com.cplanet.toring.repository.ContentsRepository;
 import com.cplanet.toring.repository.MemberRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +23,23 @@ public class MemberService {
     final private PasswordEncoder passwordEncoder;
     final private MemberRepository memberRepository;
     final private MentoringService mentoringService;
-    final private MemberMapper memberMapper;
+    final private ContentsRepository contentsRepository;
 
-    public MemberService(PasswordEncoder passwordEncoder, MemberRepository memberRepository, MentoringService mentoringService, MemberMapper memberMapper) {
+    final private MemberMapper memberMapper;
+    final private ModelMapper modelMapper;
+
+    public MemberService(PasswordEncoder passwordEncoder, MemberRepository memberRepository,
+                         MentoringService mentoringService, MemberMapper memberMapper, ContentsRepository contentsRepository,
+                         ModelMapper modelMapper) {
         this.passwordEncoder = passwordEncoder;
         this.memberRepository = memberRepository;
         this.mentoringService = mentoringService;
         this.memberMapper = memberMapper;
+        this.contentsRepository = contentsRepository;
+        this.modelMapper = modelMapper;
     }
+
+    final static int PAGE_SIZE = 4;
 
     public Member createMember(Member member) {
         member.encodePassword(passwordEncoder);
@@ -33,7 +48,16 @@ public class MemberService {
 
     public ProfileDto getMemberProfile(Long myId, Long mentorId) {
         ProfileDto profile = memberMapper.selectMemberProfile(mentorId);
-        List<ContentInfo> contents = mentoringService.getContentListByAuthor(mentorId);
+        List<ContentInfo> contents = new ArrayList<>();
+
+        Page<Contents> myContents =  contentsRepository.findByMemberIdOrderByCreateDate(myId, PageRequest.of(0, PAGE_SIZE));
+
+        myContents.forEach(c -> {
+            ContentInfo tempContents = new ContentInfo();
+            modelMapper.map(c, tempContents);
+            contents.add(tempContents);
+        });
+
         if(myId != null) {
             profile.setSubsyn(memberMapper.selectSubscribeYn(myId, mentorId));
         } else {
@@ -42,15 +66,18 @@ public class MemberService {
         if(contents != null && contents.size() > 0) {
             profile.setContents(contents);
         }
+
+        profile.setHasNextContents(myContents.hasNext());
+
         return profile;
     }
 
     public boolean saveProfile(ProfileDto profile) {
         boolean result = false;
         if(memberMapper.selectMemberProfile(profile.getMemberid()) != null) {
-            result = memberMapper.updateMemberProfile(profile) > 0 ? true : false;
+            result = memberMapper.updateMemberProfile(profile) > 0;
         } else {
-            result = memberMapper.insertMemberProfile(profile) > 0 ? true : false;
+            result = memberMapper.insertMemberProfile(profile) > 0;
         }
         return result;
     }
@@ -63,9 +90,9 @@ public class MemberService {
     public boolean requestSubs(Long memberId, Long mentorId, String subsYn) {
         boolean result = false;
         if("Y".equals(subsYn)) {
-            result = memberMapper.insertSubscribe(memberId, mentorId) > 0 ? true : false;
+            result = memberMapper.insertSubscribe(memberId, mentorId) > 0;
         } else {
-            result = memberMapper.deleteSubscribe(memberId, mentorId) > 0 ? true : false;
+            result = memberMapper.deleteSubscribe(memberId, mentorId) > 0;
         }
         return result;
     }

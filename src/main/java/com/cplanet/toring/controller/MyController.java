@@ -40,6 +40,12 @@ public class MyController extends BaseController {
         return new ApiResponse(result, message);
     }
 
+    @GetMapping(value="/contents")
+    public ResponseEntity<?> getMyContents(@RequestParam(value="page", defaultValue = "0")int page){
+        return ResponseEntity.ok(myService.getMyContents(this.getMemberId(), page));
+    }
+
+
     @GetMapping(value="/posts")
     public ResponseEntity getMyAllHistories(@RequestParam(value="type") String type,
                                             @RequestParam(value="page",required = false, defaultValue = "0")int page) {

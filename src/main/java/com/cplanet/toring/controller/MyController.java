@@ -58,7 +58,7 @@ public class MyController extends BaseController {
 
     }
 
-    @GetMapping(value = "mentos")
+    @GetMapping(value = "/mentos")
     public ResponseEntity<?> getMyMentors(@RequestParam(value = "page", required = false, defaultValue = "0")int page) {
 
         Long memberId = this.getMemberId();

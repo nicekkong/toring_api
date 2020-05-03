@@ -5,10 +5,8 @@ import com.cplanet.toring.domain.enums.ContentsStatus;
 import com.cplanet.toring.dto.enums.PostAndReviewType;
 import com.cplanet.toring.dto.response.ContentInfoResponseDto;
 import com.cplanet.toring.dto.response.ContentsAndReviewResponseDto;
-import com.cplanet.toring.repository.ContentsRepository;
-import com.cplanet.toring.repository.ContentsReviewRepository;
-import com.cplanet.toring.repository.DecisionBoardRepository;
-import com.cplanet.toring.repository.DecisionReplyRepository;
+import com.cplanet.toring.dto.response.MyMentorContentsDto;
+import com.cplanet.toring.repository.*;
 import com.cplanet.toring.utils.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -17,8 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 public class MyService {
@@ -27,23 +27,32 @@ public class MyService {
     private final ContentsReviewRepository contentsReviewRepository;
     private final DecisionBoardRepository decisionBoardRepository;
     private final DecisionReplyRepository decisionReplyRepository;
+    private final MenteeReplyRepository menteeReplyRepository;
+    private final MenteeRepository menteeRepository;
+    private final MemberService memberService;
+    private final MyMentorRepository myMentorRepository;
 
     private final ModelMapper modelMapper;
 
     public MyService(ContentsRepository contentsRepository, ContentsReviewRepository contentsReviewRepository,
                      DecisionBoardRepository decisionBoardRepository, DecisionReplyRepository decisionReplyRepository,
-                     ModelMapper modelMapper) {
+                     MenteeReplyRepository menteeReplyRepository, MenteeRepository menteeRepository,
+                     ModelMapper modelMapper, MemberService memberService, MyMentorRepository myMentorRepository) {
         this.contentsRepository = contentsRepository;
         this.contentsReviewRepository = contentsReviewRepository;
         this.decisionBoardRepository = decisionBoardRepository;
         this.decisionReplyRepository = decisionReplyRepository;
+        this.menteeReplyRepository = menteeReplyRepository;
+        this.menteeRepository = menteeRepository;
         this.modelMapper = modelMapper;
+        this.memberService = memberService;
+        this.myMentorRepository = myMentorRepository;
     }
-
 
     private final static Logger logger = LoggerFactory.getLogger(MyService.class);
     private final static int MODAL_PAGE_SIZE = 3;
     private final static int CONTENTS_PAGE_SIZE = 4;
+    private final static int MY_MENTOR_PAGE_SIZE = 3;
 
 
 
@@ -64,8 +73,6 @@ public class MyService {
         }else {
 
         }
-
-
         return result;
     }
 
@@ -83,7 +90,7 @@ public class MyService {
         List<ContentsAndReviewResponseDto.PostList> postList = new ArrayList<>();
         for(ContentsReview item : contentsReviews.getContent()) {
             postList.add(ContentsAndReviewResponseDto.PostList.builder()
-                    .id(item.getId())
+                    .id(item.getContentsId())
                     .contents(item.getContent())
                     .type(PostAndReviewType.CONTENT_REVIEW)
                     .createDate(DateUtils.toHumanizeDateTime(item.getCreateDate()))
@@ -134,7 +141,7 @@ public class MyService {
         List<ContentsAndReviewResponseDto.PostList> postList = new ArrayList<>();
         for(DecisionReply item : decisionReplies.getContent()) {
             postList.add(ContentsAndReviewResponseDto.PostList.builder()
-                    .id(item.getId())
+                    .id(item.getBoardId())
                     .contents(item.getComment())
                     .type(PostAndReviewType.DECISION_REVIEW)
                     .createDate(DateUtils.toHumanizeDateTime(item.getCreateDate()))
@@ -175,8 +182,6 @@ public class MyService {
 
     public ContentInfoResponseDto getMyContents(Long memberId, int page) {
 
-
-
         Page<Contents> contents = contentsRepository.findByMemberIdOrderByCreateDate(memberId, PageRequest.of(page, CONTENTS_PAGE_SIZE));
 
         List<ContentInfo> contentsList = new ArrayList<>();
@@ -193,5 +198,63 @@ public class MyService {
 
         return result;
     }
+
+    // 구독중인 멘토 리스트 최신 여부 ("New")
+    private Function<LocalDateTime, Boolean> setIsNew = t -> {
+        LocalDateTime now = LocalDateTime.now();
+        if(now.minusDays(3).isBefore(t)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    };
+
+    /**
+     * 마이페이지 >> 구독중인 멘토 리스트
+     * @param memberId
+     * @param page
+     * @return
+     */
+    public MyMentorContentsDto getMyMentorContentsList(Long memberId, int page) {
+
+        MyMentorContentsDto result = new MyMentorContentsDto();
+
+        Page<MyMentor> pagedContents = myMentorRepository.findByMentorByMemberId(memberId, PageRequest.of(page, MY_MENTOR_PAGE_SIZE));
+
+
+        List<MyMentorContentsDto.MyMentor> mentors = new ArrayList<>();
+        pagedContents.getContent().forEach(m -> {
+
+            // 멘토 프로필 추가
+            MyMentorContentsDto.MyMentor mentor = MyMentorContentsDto.MyMentor.builder()
+                    .mentorId(m.getProfile().getMember().getId())
+                    .thumbnail(m.getProfile().getThumbnail())
+                    .nickname(m.getProfile().getNickname())
+                    .mentorTitle(m.getProfile().getMentorTitle())
+                    .build();
+
+
+            // 멘토 컨텐츠 추가
+            List<Contents> contents = contentsRepository.findTop3ByMemberIdOrderByCreateDateDesc(m.getMentorId());
+            contents.forEach(c -> {
+                MyMentorContentsDto.MentorContents mentorContents = MyMentorContentsDto.MentorContents.builder()
+                        .contentsId(c.getId())
+                        .isNew(setIsNew.apply(c.getCreateDate()))
+                        .title(c.getTitle())
+                        .build();
+
+                mentor.getMentorContents().add(mentorContents);
+            });
+            mentors.add(mentor);
+        });
+
+        result.setHasNext(pagedContents.hasNext());
+        result.setMyMentors(mentors);
+
+        return result;
+
+    }
+
 
 }

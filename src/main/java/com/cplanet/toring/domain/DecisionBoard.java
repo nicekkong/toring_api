@@ -37,7 +37,5 @@ public class DecisionBoard extends AuditEntity {
         if(decisionChoice.getDecisionBoard() != this) {
             decisionChoice.setDecisionBoard(this);
         }
-
-
     }
 }

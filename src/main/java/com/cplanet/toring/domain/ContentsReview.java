@@ -17,21 +17,24 @@ public class ContentsReview extends AuditEntity {
 
     private Long memberId;
 
-    @ManyToOne(
-            targetEntity = Contents.class,
-            optional = false,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "contents_id")
-    private Contents contents;
+    private Long contentsId;
+
+//    @ManyToOne(
+//            targetEntity = Contents.class,
+//            optional = false,
+//            fetch = FetchType.LAZY)
+//    @JoinColumn(name = "contents_id")
+//    private Contents contents;
 
     private String content;
+
 
     @Override
     public String toString() {
         return "ContentsReview{" +
                 "id=" + id +
-                ", contents_id=" + contents.getId() +
-                ", content='" + content + '\'' +
+                ", memberId=" + memberId +
+                ", contentsId=" + contentsId +
                 '}';
     }
 }

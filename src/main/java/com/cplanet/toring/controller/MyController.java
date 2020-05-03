@@ -3,6 +3,7 @@ package com.cplanet.toring.controller;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.dto.ProfileDto;
 import com.cplanet.toring.dto.response.ContentsAndReviewResponseDto;
+import com.cplanet.toring.dto.response.MyMentorContentsDto;
 import com.cplanet.toring.service.MemberService;
 import com.cplanet.toring.service.MyService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,5 +56,14 @@ public class MyController extends BaseController {
 
         return ResponseEntity.ok(result);
 
+    }
+
+    @GetMapping(value = "mentos")
+    public ResponseEntity<?> getMyMentors(@RequestParam(value = "page", required = false, defaultValue = "0")int page) {
+
+        Long memberId = this.getMemberId();
+        MyMentorContentsDto myMentorContents = myService.getMyMentorContentsList(memberId, page);
+
+        return ResponseEntity.ok(myMentorContents);
     }
 }

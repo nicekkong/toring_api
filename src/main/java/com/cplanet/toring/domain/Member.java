@@ -48,7 +48,7 @@ public class Member extends AuditEntity {
     @Builder.Default
     private Role role = Role.USER;
 
-    @OneToOne(mappedBy = "member", optional = true, fetch=FetchType.EAGER)
+    @OneToOne(mappedBy = "member", optional = true, fetch=FetchType.LAZY)
     private Profile profile;
 
     @Transient

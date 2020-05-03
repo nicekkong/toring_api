@@ -1,15 +1,9 @@
 package com.cplanet.toring.service;
 
-import com.cplanet.toring.domain.ContentInfo;
-import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
 import com.cplanet.toring.dto.ApiResponse;
-import com.cplanet.toring.dto.ProfileDto;
-import com.cplanet.toring.mapper.MemberMapper;
 import com.cplanet.toring.mapper.MenteeMapper;
-import com.cplanet.toring.repository.MemberRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

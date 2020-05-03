@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "tr_contents")
@@ -19,8 +17,11 @@ public class Contents extends AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @Column(name = "member_id")
+    private Long memberId;
+
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false, insertable = false, updatable = false)
     private Member member;
 
     private String title;
@@ -40,10 +41,9 @@ public class Contents extends AuditEntity {
     @Builder.Default
     private LocalDateTime viewDate = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "contents")
-    @Builder.Default
-    private List<ContentsReview> reviews = new ArrayList<>();
-
+//    @OneToMany
+//    @Builder.Default
+//    private List<ContentsReview> reviews = new ArrayList<>();
 
     @Override
     public String toString() {

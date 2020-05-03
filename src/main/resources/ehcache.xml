@@ -32,4 +32,16 @@
         <persistence strategy="localTempSwap" />
     </cache>
 
+    <cache name="oneMinCache"
+           maxEntriesLocalHeap="100"
+           maxEntriesLocalDisk="100"
+           eternal="false"
+           diskSpoolBufferSizeMB="30"
+           timeToIdleSeconds="60"
+           timeToLiveSeconds="60"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap" />
+    </cache>
+
 </ehcache>

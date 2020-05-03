@@ -3,10 +3,10 @@ package com.cplanet.toring.service;
 import com.cplanet.toring.domain.ContentInfo;
 import com.cplanet.toring.domain.Contents;
 import com.cplanet.toring.domain.Member;
+import com.cplanet.toring.domain.enums.ContentsStatus;
 import com.cplanet.toring.dto.ProfileDto;
 import com.cplanet.toring.mapper.MemberMapper;
-import com.cplanet.toring.repository.ContentsRepository;
-import com.cplanet.toring.repository.MemberRepository;
+import com.cplanet.toring.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,18 +24,30 @@ public class MemberService {
     final private MemberRepository memberRepository;
     final private MentoringService mentoringService;
     final private ContentsRepository contentsRepository;
+    final private ContentsReviewRepository contentsReviewRepository;
+    final private DecisionBoardRepository decisionBoardRepository;
+    final private DecisionReplyRepository decisionReplyRepository;
+    final private MenteeRepository menteeRepository;
+    final private MenteeReplyRepository menteeReplyRepository;
 
     final private MemberMapper memberMapper;
     final private ModelMapper modelMapper;
 
-    public MemberService(PasswordEncoder passwordEncoder, MemberRepository memberRepository,
-                         MentoringService mentoringService, MemberMapper memberMapper, ContentsRepository contentsRepository,
-                         ModelMapper modelMapper) {
+    public MemberService(PasswordEncoder passwordEncoder, MemberRepository memberRepository, MentoringService mentoringService,
+                         ContentsRepository contentsRepository, ContentsReviewRepository contentsReviewRepository,
+                         DecisionBoardRepository decisionBoardRepository, DecisionReplyRepository decisionReplyRepository,
+                         MenteeRepository menteeRepository, MenteeReplyRepository menteeReplyRepository,
+                         MemberMapper memberMapper, ModelMapper modelMapper) {
         this.passwordEncoder = passwordEncoder;
         this.memberRepository = memberRepository;
         this.mentoringService = mentoringService;
-        this.memberMapper = memberMapper;
         this.contentsRepository = contentsRepository;
+        this.contentsReviewRepository = contentsReviewRepository;
+        this.decisionBoardRepository = decisionBoardRepository;
+        this.decisionReplyRepository = decisionReplyRepository;
+        this.menteeRepository = menteeRepository;
+        this.menteeReplyRepository = menteeReplyRepository;
+        this.memberMapper = memberMapper;
         this.modelMapper = modelMapper;
     }
 
@@ -57,6 +69,7 @@ public class MemberService {
             modelMapper.map(c, tempContents);
             contents.add(tempContents);
         });
+        profile.setHasNextContents(myContents.hasNext());
 
         if(myId != null) {
             profile.setSubsyn(memberMapper.selectSubscribeYn(myId, mentorId));
@@ -67,7 +80,13 @@ public class MemberService {
             profile.setContents(contents);
         }
 
-        profile.setHasNextContents(myContents.hasNext());
+        profile.setPostCounts(countAllMyPost(myId));
+
+        profile.setContentsReplyCount(countMyContentsReview(myId));
+        profile.setDecisionCount(countMyDecisionBoard(myId));
+        profile.setDecisionReplyCount(countMyDecisionReply(myId));
+        profile.setMenteeCount(countMyMentee(myId));
+        profile.setMenteeReplyCount(countMyMenteeReply(myId));
 
         return profile;
     }
@@ -104,5 +123,62 @@ public class MemberService {
     public Member getMemberInfo(Long memberId) {
         Optional<Member> optMember = memberRepository.findById(memberId);
         return optMember.orElse(null);
+    }
+
+    /**
+     * 내가 쓴 글 전체 갯수
+     * @param memberId
+     * @return
+     */
+    private int countAllMyPost(Long memberId) {
+        int totalPost = countMyMenteeReply(memberId) + countMyDecisionBoard(memberId) + countMyDecisionReply(memberId)
+                + countMyMentee(memberId) + countMyContentsReview(memberId);
+        return totalPost;
+    }
+
+
+    /**
+     * 사용자 결정장애 게시글 수
+     * @param memberId
+     * @return
+     */
+    private int countMyDecisionBoard(Long memberId) {
+        return decisionBoardRepository.countByMemberIdAndDisplayStatus(memberId, ContentsStatus.OK);
+    }
+
+    /**
+     * 결정장애 댓글 갯수
+     * @param memberId
+     * @return
+     */
+    private int countMyDecisionReply(Long memberId) {
+        return decisionReplyRepository.countByMemberId(memberId);
+    }
+
+    /**
+     * 멘티공간 작성 글 수
+     * @param memberId
+     * @return
+     */
+    private int countMyMentee(Long memberId) {
+        return menteeRepository.countByMemberId(memberId);
+    }
+
+    /**
+     * 멘티공간 댓글 갯수
+     * @param memberId
+     * @return
+     */
+    private int countMyMenteeReply(Long memberId) {
+        return menteeReplyRepository.countByMemberId(memberId);
+    }
+
+    /**
+     * 컨텐츠 댓글 갯수
+     * @param memberId
+     * @return
+     */
+    private int countMyContentsReview(Long memberId) {
+        return contentsReviewRepository.countByMemberId(memberId);
     }
 }

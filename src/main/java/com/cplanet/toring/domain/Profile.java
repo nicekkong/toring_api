@@ -21,7 +21,7 @@ public class Profile extends AuditEntity {
     private String category;
     private String introduce;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 }

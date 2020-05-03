@@ -1,9 +1,7 @@
 package com.cplanet.toring.repository;
 
-import com.cplanet.toring.domain.DecisionBoard;
-import com.cplanet.toring.domain.DecisionChoice;
-import com.cplanet.toring.domain.Member;
-import com.cplanet.toring.domain.TestData;
+import com.cplanet.toring.domain.*;
+import com.cplanet.toring.domain.enums.ContentsStatus;
 import com.cplanet.toring.dto.TestDataRequestDto;
 import com.cplanet.toring.dto.request.DecisionMainRequestDto;
 import com.cplanet.toring.dto.response.DecisionMainResponseDto;
@@ -14,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -167,6 +167,66 @@ public class RepositoryServiceTest {
     public void testReplies() {
 
         decisionBoardService.getDecisionBoardReplies(9L).forEach(System.out::println);
+
+    }
+
+    @Test
+    public void testCount() {
+
+
+        int i = decisionBoardRepository.countByMemberIdAndDisplayStatus(1L, ContentsStatus.OK);
+        decisionBoardRepository.countByMemberIdAndDisplayStatus(1L, ContentsStatus.OK);
+        decisionBoardRepository.countByMemberIdAndDisplayStatus(1L, ContentsStatus.OK);
+        System.out.println(i);
+
+    }
+
+    @Autowired
+    private MyMentorRepository myMentorRepository;
+
+    @Test
+    public void testMentor() {
+
+
+
+//         System.out.println(myMentorRepository.findByMemberIdOrderByCreateDateDesc(1L, PageRequest.of(0, 2)));
+
+//        List<MyMentor> myMentor = myMentorRepository.findByMemberIdAndStatusOrderByCreateDateDesc(1L, PageRequest.of(0, 2)).getContent();
+//        List<MyMentor> myMentor = myMentorRepository.findByMemberIdAndStatusOrderByCreateDateDesc(1L);
+//        System.out.println("Query Done~!!!!!!!!!");
+
+//
+//        myMentor.forEach(m -> {
+//            System.out.println(m.getProfile().getNickname());
+//            m.getContents().forEach(c -> {
+//                System.out.println(c.getThumbImage());
+//            });
+//        });
+
+
+
+    }
+
+    @Test
+    public void testMyMentor() {
+//        myMentorRepository.findByMemberIdAndMemberOrderByCreateDateDesc(1L,  PageRequest.of(0 ,2));
+
+//       List<MyMentor> profile =  myMentorRepository.findByMemberIdAndProfile_Member_MemberStatusOkOrderByCreateDateDesc(1L);
+
+//        List<MyMentor> profile = myMentorRepository.findByMentorListByMemberId(1L);
+        Page<MyMentor> profile = myMentorRepository.findByMentorByMemberId(1L, PageRequest.of(0, 2));
+
+        System.out.println(profile);
+
+    }
+
+    @Autowired
+    private ContentsRepository contentsRepository;
+
+    @Test
+    public void testContents() {
+
+        System.out.println(contentsRepository.findTop3ByMemberIdOrderByCreateDateDesc(71L));
 
     }
 

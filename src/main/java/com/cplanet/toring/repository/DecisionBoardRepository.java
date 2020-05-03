@@ -2,6 +2,7 @@ package com.cplanet.toring.repository;
 
 import com.cplanet.toring.domain.DecisionBoard;
 import com.cplanet.toring.domain.enums.ContentsStatus;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +23,8 @@ public interface DecisionBoardRepository extends JpaRepository<DecisionBoard, Lo
     Page<DecisionBoard> findAllByMemberIdAndDisplayStatusOrderByCreateDateDesc(Long memberId, ContentsStatus status, Pageable page);
 
 //    DecisionBoard findAllByDisplayStatus_
+// "'mbr_preference_'.concat(#mbrId)"
+    @Cacheable(value = "oneMinCache", key="'decisionCount_'.concat(#memberId)")
+    int countByMemberIdAndDisplayStatus(Long memberId, ContentsStatus status );
 
 }

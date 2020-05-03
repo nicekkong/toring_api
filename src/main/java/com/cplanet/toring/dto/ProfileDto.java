@@ -15,8 +15,15 @@ public class ProfileDto {
     private String introduce;
     private List<ContentInfo> contents;
     private boolean hasNextContents;
-    private int subscount;
-    private int mentorcount;
-    private int purchasecount;
-    private String subsyn;
+    private String subsyn;  // 구독자 보유 여부
+    private int subscount;  // 구독자수
+    private int mentorcount; //구독중인 멘토
+    private int purchasecount; // 콘텐츠 열람 내역
+    private int postCounts; // 내가 쓴 글 전체 카운트
+
+    private int contentsReplyCount;
+    private int menteeCount;
+    private int menteeReplyCount;
+    private int decisionCount;
+    private int decisionReplyCount;
 }

@@ -1,19 +1,29 @@
 package com.cplanet.toring.domain;
 
-import lombok.Data;
+import com.cplanet.toring.domain.common.AuditEntity;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.util.Date;
+import javax.persistence.*;
 
-@Data
+@Getter @Setter
 @Accessors(chain = true)
-public class MenteeReply {
+@Entity
+@Table(name = "tr_mentee_reply")
+@AllArgsConstructor @NoArgsConstructor
+@Builder
+public class MenteeReply extends AuditEntity {
+    private static final long serialVersionUID = -3408052145168838712L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long menteeid;
-    private Long memberid;
+    private Long menteeId;
+    private Long memberId;
     private String content;
-    private Date createdate;
-    private Date updatedate;
+
+    @Transient
     private String nickname;
+    @Transient
     private String thumbnail;
 }

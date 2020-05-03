@@ -2,7 +2,6 @@ package com.cplanet.toring.mapper;
 
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
-import com.cplanet.toring.dto.ProfileDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

@@ -52,7 +52,7 @@ public class MyService {
     private final static Logger logger = LoggerFactory.getLogger(MyService.class);
     private final static int MODAL_PAGE_SIZE = 3;
     private final static int CONTENTS_PAGE_SIZE = 4;
-    private final static int MY_MENTOR_PAGE_SIZE = 3;
+    private final static int MY_MENTOR_PAGE_SIZE = 1;
 
 
 
@@ -220,22 +220,22 @@ public class MyService {
 
         MyMentorContentsDto result = new MyMentorContentsDto();
 
+        // 1. 사용자별 멘토를 먼저 조회한후,
         Page<MyMentor> pagedContents = myMentorRepository.findByMentorByMemberId(memberId, PageRequest.of(page, MY_MENTOR_PAGE_SIZE));
 
 
         List<MyMentorContentsDto.MyMentor> mentors = new ArrayList<>();
         pagedContents.getContent().forEach(m -> {
-
             // 멘토 프로필 추가
             MyMentorContentsDto.MyMentor mentor = MyMentorContentsDto.MyMentor.builder()
-                    .mentorId(m.getProfile().getMember().getId())
+                    .mentorId(m.getMentorId())
                     .thumbnail(m.getProfile().getThumbnail())
                     .nickname(m.getProfile().getNickname())
                     .mentorTitle(m.getProfile().getMentorTitle())
                     .build();
 
 
-            // 멘토 컨텐츠 추가
+            // 2. 각 멘토별 컨텐츠 조회하여 추가(최신순 Max 3개까지만)
             List<Contents> contents = contentsRepository.findTop3ByMemberIdOrderByCreateDateDesc(m.getMentorId());
             contents.forEach(c -> {
                 MyMentorContentsDto.MentorContents mentorContents = MyMentorContentsDto.MentorContents.builder()
@@ -253,7 +253,6 @@ public class MyService {
         result.setMyMentors(mentors);
 
         return result;
-
     }
 
 

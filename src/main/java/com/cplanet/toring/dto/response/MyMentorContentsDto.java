@@ -12,6 +12,7 @@ public class MyMentorContentsDto {
 
     @Builder.Default
     boolean hasNext = false;
+    @Builder.Default
     private List<MyMentor> myMentors = new ArrayList<>();
 
 
@@ -24,6 +25,7 @@ public class MyMentorContentsDto {
         private String thumbnail;
         private String  nickname;
         private String mentorTitle;
+        @Builder.Default
         private List<MentorContents> mentorContents = new ArrayList<>();
     }
 

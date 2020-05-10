@@ -29,4 +29,5 @@ public class ContentResponse {
     private String requesttype;
     private Integer pageno;
     private String nickname;
+    private Integer reviewcount;
 }

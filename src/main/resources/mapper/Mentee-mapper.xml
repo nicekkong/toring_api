@@ -116,4 +116,52 @@
         where id = #{param1}
     </delete>
 
+    <select id="selectMenteeReviewList" parameterType="java.util.Map" resultType="com.cplanet.toring.domain.MenteeReview">
+        select
+        a.id,
+        a.member_id as memberid,
+        a.content_id as contentid,
+        a.content,
+        a.create_date as createdate,
+        a.update_date as updatedate,
+        b.nickname,
+        b.thumbnail
+        from tr_contents_review a, tr_profile b
+        where 1 = 1
+        and a.content_id = #{contentId}
+        and a.member_id = b.member_id
+        order by a.create_date desc
+        <if test="start != null">
+            limit #{start}, #{pagecount}
+        </if>
+    </select>
+
+    <insert id="insertMenteeReview" parameterType="com.cplanet.toring.domain.MenteeReview">
+        insert into tr_contents_review (
+        content,
+        member_id,
+        content_id,
+        create_date,
+        update_date
+        ) values (
+        #{content},
+        #{memberid},
+        #{contentid},
+        now(),
+        now()
+        )
+    </insert>
+
+    <update id="updateMenteeReview" parameterType="com.cplanet.toring.domain.MenteeReview">
+        update tr_contents_review
+        set content = #{content},
+        update_date = now()
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMenteeReview" parameterType="java.lang.Long">
+        delete from tr_contents_review
+        where id = #{param1}
+    </delete>
+
 </mapper>

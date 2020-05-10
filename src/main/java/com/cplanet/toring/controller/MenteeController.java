@@ -3,6 +3,7 @@ package com.cplanet.toring.controller;
 import com.cplanet.toring.domain.ContentInfo;
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
+import com.cplanet.toring.domain.MenteeReview;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.exception.UnauthorizedException;
 import com.cplanet.toring.service.MenteeService;
@@ -79,6 +80,25 @@ public class MenteeController extends BaseController {
     @GetMapping(value = "reply/delete")
     public ApiResponse deleteMenteeReply(@RequestParam(value = "id") Long id) {
         return menteeService.deleteMenteeReply(id);
+    }
+
+    @GetMapping(value = "review/list")
+    public List<MenteeReview> getMenteeReviewList(@RequestParam(value = "id") Long contentId,
+                                                  @RequestParam(value = "pageNo") Long pageNo) {
+        return menteeService.getMenteeReviewList(contentId, pageNo);
+    }
+
+    @PostMapping(value = "review/save")
+    public ApiResponse saveMenteeReview(@RequestBody MenteeReview menteeReview) {
+        if(StringUtils.isEmpty(menteeReview.getMemberid())) {
+            throw new UnauthorizedException("mentee/review/save > memberId is not recognized");
+        }
+        return menteeService.saveMenteeReview(menteeReview);
+    }
+
+    @GetMapping(value = "review/delete")
+    public ApiResponse deleteMenteeReview(@RequestParam(value = "id") Long id) {
+        return menteeService.deleteMenteeReview(id);
     }
 
     @GetMapping(value = "content/list")

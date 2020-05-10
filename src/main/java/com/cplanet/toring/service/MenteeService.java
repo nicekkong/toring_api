@@ -2,6 +2,7 @@ package com.cplanet.toring.service;
 
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
+import com.cplanet.toring.domain.*;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.mapper.MenteeMapper;
 import org.springframework.stereotype.Service;
@@ -83,5 +84,29 @@ public class MenteeService {
 
     private Long getStartNo(Long pageNo, int pageCount) {
         return (pageNo-1) * pageCount;
+    }
+
+    public List<MenteeReview> getMenteeReviewList(Long contentId, Long pageNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("contentId", contentId);
+        param.put("start", getStartNo(pageNo, 2));
+        param.put("pagecount", 2);
+        return menteeMapper.selectMenteeReviewList(param);
+    }
+
+    public ApiResponse saveMenteeReview(MenteeReview menteeReview) {
+        String type = menteeReview.getId() == null ? "저장" : "수정";
+        boolean result = false;
+        if ("저장".equals(type)) {
+            result = menteeMapper.insertMenteeReview(menteeReview) > 0? true : false;
+        } else {
+            result = menteeMapper.updateMenteeReview(menteeReview) > 0? true : false;
+        }
+        return new ApiResponse(result, result? type + " 완료" : type +" 실패");
+    }
+
+    public ApiResponse deleteMenteeReview(Long id) {
+        boolean result = menteeMapper.deleteMenteeReview(id) > 0? true : false;
+        return new ApiResponse(result, result? "삭제 완료" : "삭제 실패");
     }
 }

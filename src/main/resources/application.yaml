@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: local # 기본 환경 선택
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 env:
   servers:
@@ -25,7 +29,7 @@ permitAllUrls:
   /api/memberInfo,
   /api/mentoring/**,
   /api/mentee/**,
-  /file/**,
+  /api/file/**,
   /api/decision/main,
   /mask/**
 

@@ -2,6 +2,7 @@ package com.cplanet.toring.mapper;
 
 import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeReply;
+import com.cplanet.toring.domain.MenteeReview;
 import com.cplanet.toring.dto.ProfileDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,12 @@ public interface MenteeMapper {
     int deleteMenteeReply(Long id);
 
     List<MenteeReply> selectMenteeReplyList(Map<String, Object> param);
+
+    List<MenteeReview> selectMenteeReviewList(Map<String, Object> param);
+
+    int insertMenteeReview(MenteeReview menteeReview);
+
+    int updateMenteeReview(MenteeReview menteeReview);
+
+    int deleteMenteeReview(Long id);
 }

@@ -80,13 +80,13 @@ public class MemberService {
             profile.setContents(contents);
         }
 
-        profile.setPostCounts(countAllMyPost(myId));
+        profile.setPostCounts(countAllMyPost(mentorId));
 
-        profile.setContentsReplyCount(countMyContentsReview(myId));
-        profile.setDecisionCount(countMyDecisionBoard(myId));
-        profile.setDecisionReplyCount(countMyDecisionReply(myId));
-        profile.setMenteeCount(countMyMentee(myId));
-        profile.setMenteeReplyCount(countMyMenteeReply(myId));
+        profile.setContentsReplyCount(countMyContentsReview(mentorId));
+        profile.setDecisionCount(countMyDecisionBoard(mentorId));
+        profile.setDecisionReplyCount(countMyDecisionReply(mentorId));
+        profile.setMenteeCount(countMyMentee(mentorId));
+        profile.setMenteeReplyCount(countMyMenteeReply(mentorId));
 
         return profile;
     }

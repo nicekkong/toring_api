@@ -62,7 +62,7 @@ public class MemberService {
         ProfileDto profile = memberMapper.selectMemberProfile(mentorId);
         List<ContentInfo> contents = new ArrayList<>();
 
-        Page<Contents> myContents =  contentsRepository.findByMemberIdOrderByCreateDate(myId, PageRequest.of(0, PAGE_SIZE));
+        Page<Contents> myContents =  contentsRepository.findByMemberIdOrderByCreateDate(mentorId, PageRequest.of(0, PAGE_SIZE));
 
         myContents.forEach(c -> {
             ContentInfo tempContents = new ContentInfo();

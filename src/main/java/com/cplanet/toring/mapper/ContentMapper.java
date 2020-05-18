@@ -37,4 +37,8 @@ public interface ContentMapper {
     List<ContentInfo> selectContentList(long memberid);
 
     List<ContentInfo> selectContentListByKeyword(Map<String, Object> param);
+
+    ContentResponse.MentorContent selectPreviousContent(Map<String, Object> param);
+
+    ContentResponse.MentorContent selectNextContent(Map<String, Object> param);
 }

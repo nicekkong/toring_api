@@ -115,6 +115,17 @@ public class MentoringService {
     public ContentResponse getContentInfo(long contentid) {
         ContentResponse contentInfo = contentMapper.selectContentInfo(contentid);
         if(contentInfo != null) {
+            Map<String, Object> param = new HashMap<>();
+            param.put("contentid", contentInfo.getId());
+            param.put("memberid", contentInfo.getMemberid());
+            ContentResponse.MentorContent previousContent = contentMapper.selectPreviousContent(param);
+            if(previousContent != null) {
+                contentInfo.setPreContent(previousContent);
+            }
+            ContentResponse.MentorContent nextContent = contentMapper.selectNextContent(param);
+            if(nextContent != null) {
+                contentInfo.setNextContent(nextContent);
+            }
             contentInfo.setSuccess(true);
         } else {
             contentInfo = new ContentResponse();

@@ -129,6 +129,27 @@
         where id = #{contentid}
     </select>
 
+    <select id="selectNextContent" parameterType="java.util.Map" resultType="com.cplanet.toring.dto.response.ContentResponse$MentorContent">
+        select
+          a.id,
+          a.title,
+          a.thumb_image as thumbimage
+        from tr_contents a
+        where a.id = (select min(id) from tr_contents where id &gt; #{contentid} and member_id = #{memberid})
+        and a.status = 'display'
+    </select>
+
+    <select id="selectPreviousContent" parameterType="java.util.Map" resultType="com.cplanet.toring.dto.response.ContentResponse$MentorContent">
+        select
+        a.id,
+        a.title,
+        a.thumb_image as thumbimage
+        from tr_contents a
+        where id =  (select max(id) from tr_contents where id &lt; #{contentid} and member_id = #{memberid})
+        and a.status = 'display'
+    </select>
+
+
     <select id="selectContentList" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.ContentInfo">
         select
           id,

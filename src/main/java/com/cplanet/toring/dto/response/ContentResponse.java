@@ -30,4 +30,13 @@ public class ContentResponse {
     private Integer pageno;
     private String nickname;
     private Integer reviewcount;
+    private MentorContent nextContent;
+    private MentorContent preContent;
+
+    @Data
+    public static class MentorContent {
+        private Long id;
+        private String title;
+        private String thumbimage;
+    }
 }

@@ -186,6 +186,12 @@
         (select count(1) from tr_purchase_history where contents_id = a.id and create_date > date_add(now(), interval -7 day)) as currentcount
         from tr_contents a
         where a.status = 'display'
+        <if test="sub1 != null and sub1 != 0">
+            and a.category_sub1 = #{sub1}
+        </if>
+        <if test="sub2 != null and sub2 != 0">
+            and a.category_sub2 = #{sub2}
+        </if>
         <if test="keyword1 != null">
             and a.title like #{keyword1}
             or a.keyword like #{keyword1}

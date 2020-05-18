@@ -137,7 +137,7 @@ public class MentoringService {
         return contentMapper.selectContentList(memberId);
     }
 
-    public List<ContentInfo> getContentListByKeyword(String keyword, Long pageNo, int pageCount, String type) {
+    public List<ContentInfo> getContentListByKeyword(Integer sub1, Integer sub2, String keyword, Long pageNo, int pageCount, String type) {
         String[] keywords = keyword.split("#");
         Map<String, Object> param = new HashMap<>();
         for(int i = 0; i < keywords.length; i++) {
@@ -145,13 +145,18 @@ public class MentoringService {
                 param.put("keyword"+(i), "%"+keywords[i]+"%");
             }
         }
+        param.put("sub1", sub1);
+        param.put("sub2", sub2);
         param.put("type", type);
         param.put("start", getStartNo(pageNo, pageCount));
         param.put("pagecount", pageCount);
 
         List<ContentInfo> contentList = contentMapper.selectContentListByKeyword(param);
         if(contentList.size() == 0) {
-            contentList = contentMapper.selectContentListByKeyword(null);
+            Map<String, Object> param2 = new HashMap<>();
+            param2.put("start", getStartNo(pageNo, pageCount));
+            param2.put("pagecount", pageCount);
+            contentList = contentMapper.selectContentListByKeyword(param2);
         }
         return contentList;
     }

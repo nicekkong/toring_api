@@ -208,6 +208,13 @@ public class RepositoryServiceTest {
     }
 
     @Test
+    public void testProfile() {
+
+        Member member = memberRepository.findByIdWithProfile(1L).get();
+        System.out.println(member);
+    }
+
+    @Test
     public void testMyMentor() {
 //        myMentorRepository.findByMemberIdAndMemberOrderByCreateDateDesc(1L,  PageRequest.of(0 ,2));
 
@@ -229,5 +236,7 @@ public class RepositoryServiceTest {
         System.out.println(contentsRepository.findTop3ByMemberIdOrderByCreateDateDesc(71L));
 
     }
+
+
 
 }

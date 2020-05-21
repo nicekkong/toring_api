@@ -34,7 +34,8 @@ public class MemberDetailService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long memberId) {
 
-        Member member =  memberRepository.findById(memberId).orElseThrow(() ->
+//        Member member =  memberRepository.findById(memberId).orElseThrow(() ->
+        Member member =  memberRepository.findByIdWithProfile(memberId).orElseThrow(() ->
                 new UsernameNotFoundException("Member not found ::: MEMBER_ID : " + memberId));
 
         return MemberPrincipal.create(member);

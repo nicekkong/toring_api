@@ -1,12 +1,9 @@
 package com.cplanet.toring.repository;
 
 
-import com.cplanet.toring.domain.FaqCategory;
-import com.cplanet.toring.domain.FaqInfo;
 import com.cplanet.toring.domain.Member;
 import com.cplanet.toring.domain.enums.MemberStatus;
 import com.cplanet.toring.domain.enums.Role;
-import com.cplanet.toring.service.FaqService;
 import com.cplanet.toring.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,11 +29,11 @@ public class MemberRepositoryTest {
     @Autowired
     private ContentsReviewRepository contentsReviewRepository;
 
-    @Autowired
-    private FaqInfoRepository faqInfoRepository;
-
-    @Autowired
-    private FaqCategoryRepository faqCategoryRepository;
+//    @Autowired
+//    private FaqInfoRepository faqInfoRepository;
+//
+//    @Autowired
+//    private FaqCategoryRepository faqCategoryRepository;
 
     @Test
     public void memberSaveTest() {
@@ -77,32 +72,32 @@ public class MemberRepositoryTest {
         //contentsReviewRepository.findAllByMemberIdOrderByCreateDateDesc(1L).forEach(System.out::println);
     }
 
-    @Test
-    public void makeFaqData() {
-//        FaqCategory faqCategory = FaqCategory.builder()
-//                .code("ETC")
-//                .name("기타")
-//                .build();
-//        faqCategoryRepository.save(faqCategory);
-
-        for(int i = 1; i <= 10 ; i++ ) {
-            FaqInfo faqInfo = FaqInfo.builder()
-                    .faqCategory(faqCategoryRepository.findById(5L).get())
-                    .question(i +". 기타 문의 입니다??")
-                    .answer(i +".  기타 답변입니다.")
-                    .build();
-            faqInfoRepository.save(faqInfo);
-        }
-    }
-
-    @Autowired
-    private FaqService faqService;
-
-    @Test
-    public void testFaqList() {
-
-        List<FaqInfo> faqInfo = faqService.getFaqInfo(0, null);
-        System.out.println(faqInfo);
-    }
+//    @Test
+//    public void makeFaqData() {
+////        FaqCategory faqCategory = FaqCategory.builder()
+////                .code("ETC")
+////                .name("기타")
+////                .build();
+////        faqCategoryRepository.save(faqCategory);
+//
+//        for(int i = 1; i <= 10 ; i++ ) {
+//            FaqInfo faqInfo = FaqInfo.builder()
+//                    .faqCategory(faqCategoryRepository.findById(5L).get())
+//                    .question(i +". 기타 문의 입니다??")
+//                    .answer(i +".  기타 답변입니다.")
+//                    .build();
+//            faqInfoRepository.save(faqInfo);
+//        }
+//    }
+//
+//    @Autowired
+//    private FaqService faqService;
+//
+//    @Test
+//    public void testFaqList() {
+//
+//        List<FaqInfo> faqInfo = faqService.getFaqInfo(0, null);
+//        System.out.println(faqInfo);
+//    }
 
 }

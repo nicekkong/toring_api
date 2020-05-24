@@ -5,6 +5,8 @@ import com.cplanet.toring.domain.common.AuditEntity;
 import com.cplanet.toring.domain.enums.MemberStatus;
 import com.cplanet.toring.domain.enums.Role;
 import com.cplanet.toring.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import java.util.List;
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member extends AuditEntity {
 
     // 기본 약관 코드, 특별히 로직이 없으므로 일단은 하드코딩 값으로 전달한다.

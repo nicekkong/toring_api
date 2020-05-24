@@ -13,7 +13,7 @@ public interface DecisionChoiceRepository extends JpaRepository<DecisionChoice, 
     @Transactional
     @Query(value = "update tr_decision_choice " +
                     "  set count = count +1 " +
-                    "where id = :id " ,nativeQuery = true)
+                    "where id = :id ", nativeQuery = true)
     void updateDecisionChoiceCount(@Param("id") Long id);
 
 }

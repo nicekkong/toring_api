@@ -237,6 +237,18 @@ public class RepositoryServiceTest {
 
     }
 
+    @Autowired
+    private FaqCategoryRepository faqCategoryRepository;
+
+    @Test
+    public void testCategory() {
+
+        Page<FaqCategory> all = faqCategoryRepository.findAll(PageRequest.of(0, 5));
+        System.out.println(all);
+
+
+    }
+
 
 
 }

@@ -103,7 +103,8 @@ public class AuthenticationController  extends BaseController {
         if(getAccessToken() == null) {
             return new Member();
         }
-        return this.getMemberInfo();
+        Member member = this.getMemberInfo();
+        return member;
     }
 
 

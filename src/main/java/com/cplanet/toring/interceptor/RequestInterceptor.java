@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +29,9 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         if(response.getStatus() != 200) {
             logger.error("Response Status : {} ", response.getStatus());
-            logger.error(response.getOutputStream().toString());
+            ServletOutputStream stream = response.getOutputStream();
+
+            logger.error(stream.toString());
         }
         super.postHandle(request, response, handler, modelAndView);
     }

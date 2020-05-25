@@ -15,9 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -246,6 +248,21 @@ public class RepositoryServiceTest {
         Page<FaqCategory> all = faqCategoryRepository.findAll(PageRequest.of(0, 5));
         System.out.println(all);
 
+
+    }
+
+    @Test
+//    @Transactional (LAZY Exception이 발생되지 않게 하려면 동일 Transaction으로 묶어 줘야 한다.)
+    public void testRepo() {
+
+        DecisionBoard board = decisionBoardRepository.findById(10L).get();
+
+        board.getDecisionChoices().stream().map(
+                c -> {
+                    System.out.println(c.getOptionText());
+                    return c;
+                }
+        ).collect(Collectors.toList());
 
     }
 

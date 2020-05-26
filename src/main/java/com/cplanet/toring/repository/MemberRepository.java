@@ -11,7 +11,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findById(Long id);
 
     @Query(value = "select m from Member m left join m.profile p where m.id=:id")
-    Optional<Member> findByIdWithProfile(@Param(value="id")Long id);
+    Optional<Member> findByIdWithProfile(@Param(value="id") Long id);
 
     Optional<Member> findByEmail(String email);
 

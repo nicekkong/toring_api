@@ -20,11 +20,11 @@ public class MenteeService {
         this.menteeMapper = menteeMapper;
     }
 
-    public Mentee getMenteeDetail(Long id) {
+    public MenteeUser getMenteeDetail(Long id) {
         return menteeMapper.selectMenteeDetail(id);
     }
 
-    public List<Mentee> getMenteeList(String keyword, Long pageNo) {
+    public List<MenteeUser> getMenteeList(String keyword, Long pageNo) {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", keyword);
         param.put("start", getStartNo(pageNo, 6));
@@ -32,7 +32,7 @@ public class MenteeService {
         return menteeMapper.selectMenteeList(param);
     }
 
-    public ApiResponse saveMentee(Mentee mentee) {
+    public ApiResponse saveMentee(MenteeUser mentee) {
         String type = mentee.getId() == null ? "저장" : "수정";
         boolean result = false;
         if ("저장".equals(type)) {
@@ -43,7 +43,7 @@ public class MenteeService {
         return new ApiResponse(result, result? type + " 완료" : type +" 실패");
     }
 
-    public ApiResponse updateMentee(Mentee mentee) {
+    public ApiResponse updateMentee(MenteeUser mentee) {
         boolean result = menteeMapper.updateMentee(mentee) > 0? true : false;
         return new ApiResponse(result, result? "수정 완료" : "수정 실패");
     }

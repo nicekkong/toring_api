@@ -4,6 +4,7 @@ import com.cplanet.toring.domain.Mentee;
 import com.cplanet.toring.domain.MenteeInfo;
 import com.cplanet.toring.domain.MenteeReply;
 import com.cplanet.toring.domain.MenteeReview;
+import com.cplanet.toring.domain.MenteeUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +15,13 @@ import java.util.Map;
 @Mapper
 public interface MenteeMapper {
 
-    Mentee selectMenteeDetail(long id);
+    MenteeUser selectMenteeDetail(long id);
 
-    List<MenteeInfo> selectMenteeList(Map<String, Object> param);
+    List<MenteeUser> selectMenteeList(Map<String, Object> param);
 
-    int insertMentee(Mentee mentee);
+    int insertMentee(MenteeUser mentee);
 
-    int updateMentee(Mentee mentee);
+    int updateMentee(MenteeUser mentee);
 
     int deleteMentee(Long id, Long memberId);
 

@@ -124,7 +124,8 @@
           a.create_date as createdate,
           a.update_date as updatedate,
           (select nickname from tr_profile where member_id = a.member_id) as nickname,
-          (select count(1) from tr_contents_review where content_id = a.id) as reviewcount
+          (select count(1) from tr_contents_review where content_id = a.id) as reviewcount,
+          (select count(1) from tr_purchase_history where contents_id = a.id) as viewcount
         from tr_contents a
         where id = #{contentid}
     </select>

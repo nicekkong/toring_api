@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cplanet.toring.mapper.MenteeMapper">
-    <select id="selectMenteeList" parameterType="java.util.Map" resultType="com.cplanet.toring.domain.MenteeInfo">
+    <select id="selectMenteeList" parameterType="java.util.Map" resultType="com.cplanet.toring.domain.MenteeUser">
       select
         a.id,
         a.member_id as memberid,
@@ -21,7 +21,7 @@
           limit #{start}, #{pagecount}
       </if>
     </select>
-    <select id="selectMenteeDetail" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.Mentee">
+    <select id="selectMenteeDetail" parameterType="java.lang.Long" resultType="com.cplanet.toring.domain.MenteeUser">
       select
         a.id,
         a.member_id as memberid,
@@ -34,7 +34,7 @@
       from tr_mentees a
       where a.id = #{id}
     </select>
-    <insert id="insertMentee" parameterType="com.cplanet.toring.domain.Mentee">
+    <insert id="insertMentee" parameterType="com.cplanet.toring.domain.MenteeUser">
         insert into tr_mentees (
           title,
           content,
@@ -52,7 +52,7 @@
         )
     </insert>
 
-    <update id="updateMentee" parameterType="com.cplanet.toring.domain.Mentee">
+    <update id="updateMentee" parameterType="com.cplanet.toring.domain.MenteeUser">
       update tr_mentees
       set title = #{title},
           keyword = #{keyword},

@@ -30,6 +30,7 @@ public class ContentResponse {
     private Integer pageno;
     private String nickname;
     private Integer reviewcount;
+    private Integer viewcount;
     private MentorContent nextContent;
     private MentorContent preContent;
 

@@ -1,6 +1,10 @@
 package com.cplanet.toring.controller;
 
-import com.cplanet.toring.domain.*;
+import com.cplanet.toring.domain.ContentInfo;
+import com.cplanet.toring.domain.Mentee;
+import com.cplanet.toring.domain.MenteeReply;
+import com.cplanet.toring.domain.MenteeReview;
+import com.cplanet.toring.domain.MenteeUser;
 import com.cplanet.toring.dto.ApiResponse;
 import com.cplanet.toring.exception.UnauthorizedException;
 import com.cplanet.toring.service.MenteeService;
@@ -25,28 +29,28 @@ public class MenteeController extends BaseController {
     }
 
     @GetMapping(value = "list")
-    public List<MenteeInfo> getMenteeList(@RequestParam(value = "keyword") String keyword,
+    public List<MenteeUser> getMenteeList(@RequestParam(value = "keyword") String keyword,
                                           @RequestParam(value = "pageNo") Long pageNo) {
         String searchKeyword = StringUtils.isEmpty(keyword)? "" : "%"+keyword+"%";
         return menteeService.getMenteeList(searchKeyword, pageNo);
     }
 
     @GetMapping(value = "detail")
-    public Mentee getMenteeDetail(@RequestParam(value = "id") Long id) {
+    public MenteeUser getMenteeDetail(@RequestParam(value = "id") Long id) {
         return menteeService.getMenteeDetail(id);
     }
 
     @PostMapping(value = "save")
-    public ApiResponse saveMentee(@RequestBody Mentee mentee) {
-//        mentee.setMemberId(this.getMemberInfo().getId());
-//        if(StringUtils.isEmpty(mentee.getMemberId())) {
-//            throw new UnauthorizedException("mentee/save > memberId is not recognized");
-//        }
+    public ApiResponse saveMentee(@RequestBody MenteeUser mentee) {
+        mentee.setMemberid(this.getMemberInfo().getId());
+        if(StringUtils.isEmpty(mentee.getMemberid())) {
+            throw new UnauthorizedException("mentee/save > memberId is not recognized");
+        }
         return menteeService.saveMentee(mentee);
     }
 
     @PostMapping(value = "update")
-    public ApiResponse updateMentee(@RequestBody Mentee mentee) {
+    public ApiResponse updateMentee(@RequestBody MenteeUser mentee) {
         return menteeService.updateMentee(mentee);
     }
 

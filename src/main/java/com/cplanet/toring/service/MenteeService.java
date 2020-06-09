@@ -24,7 +24,7 @@ public class MenteeService {
         return menteeMapper.selectMenteeDetail(id);
     }
 
-    public List<Mentee> getMenteeList(String keyword, Long pageNo) {
+    public List<MenteeInfo> getMenteeList(String keyword, Long pageNo) {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", keyword);
         param.put("start", getStartNo(pageNo, 6));

@@ -3,6 +3,7 @@ package com.cplanet.toring.domain;
 import com.cplanet.toring.domain.common.AuditEntity;
 import com.cplanet.toring.domain.enums.ContentsStatus;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder
+@Where(clause = "display_status = 'OK'")
 public class FaqCategory extends AuditEntity {
 
     @Id

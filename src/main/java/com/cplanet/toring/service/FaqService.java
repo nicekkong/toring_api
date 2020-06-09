@@ -30,16 +30,11 @@ public class FaqService {
 
     public List<FaqInfo> getFaqInfo(int page, String category) {
 
-        Page<FaqInfo> faqInfoList;
-        if(StringUtils.isEmpty(category)) {
-            // 전체 목록
-            faqInfoList = faqInfoRepository.findAllFaq(PageRequest.of(page, PAGE_SIZE));
-        } else {
-            // 특정 카테고리
-            faqInfoList = faqInfoRepository.findAllFaqByCategory(category, PageRequest.of(page, PAGE_SIZE));
-        }
+        List<FaqInfo> faqInfoList;
+        // 전체 목록
+        faqInfoList = faqInfoRepository.findFaqInfosBy("");
 
-        List<FaqInfo> faqInfos = faqInfoList.getContent().stream()
+        List<FaqInfo> faqInfos = faqInfoList.stream()
                 .peek(f -> f.setCategoryName(f.getFaqCategory().getName())) // 특정 필드 변환
                 .collect(Collectors.toList());
 

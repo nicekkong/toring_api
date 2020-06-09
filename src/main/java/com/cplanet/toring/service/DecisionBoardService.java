@@ -128,9 +128,9 @@ public class DecisionBoardService {
 
         List<DecisionReply> replies = decisionReplyRepository.findDecisionRepliesByBoardIdOrderByCreateDate(boardId);
         // 작성일 추가
-        replies.forEach(r -> {
-            r.setCreated(DateUtils.toHumanizeDateTime(r.getCreateDate()));
-        });
+//        replies.forEach(r -> {
+//            r.setCreated(DateUtils.toHumanizeDateTime(r.getCreateDate()));
+//        });
         return replies;
 
     }

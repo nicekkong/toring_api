@@ -1,6 +1,7 @@
 package com.cplanet.toring.mapper;
 
 import com.cplanet.toring.domain.Mentee;
+import com.cplanet.toring.domain.MenteeInfo;
 import com.cplanet.toring.domain.MenteeReply;
 import com.cplanet.toring.domain.MenteeReview;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,7 +16,7 @@ public interface MenteeMapper {
 
     Mentee selectMenteeDetail(long id);
 
-    List<Mentee> selectMenteeList(Map<String, Object> param);
+    List<MenteeInfo> selectMenteeList(Map<String, Object> param);
 
     int insertMentee(Mentee mentee);
 

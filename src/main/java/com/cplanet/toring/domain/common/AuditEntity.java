@@ -1,6 +1,7 @@
 package com.cplanet.toring.domain.common;
 
 
+import com.cplanet.toring.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -41,5 +42,16 @@ public class AuditEntity implements Serializable {
     @Transient
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String updated;
+
+    void setCreateDate(LocalDateTime createDate) {
+        System.out.println(" >>>>>>>>>>>>>> setCreated " + this.getCreateDate());
+        this.createDate = createDate;
+        this.created = DateUtils.toHumanizeDateTime(createDate);
+    }
+
+    void setUpdateDate(LocalDateTime updateDate) {
+        this.updateDate = updateDate;
+        this.updated = DateUtils.toHumanizeDateTime(updateDate);
+    }
 
 }

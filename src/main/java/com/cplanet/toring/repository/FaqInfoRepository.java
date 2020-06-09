@@ -6,13 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface FaqInfoRepository extends JpaRepository<FaqInfo, Long> {
 
     @Query(value = "select f from FaqInfo f join fetch f.faqCategory c " +
                     "where f.displayStatus = 'OK' and c.displayStatus='OK' " +
-                    "order by c.ordering desc, f.ordering desc, f.createDate desc",
-        countQuery = "select count(f) from FaqInfo f where f.displayStatus='OK'")
-    Page<FaqInfo> findAllFaq(Pageable page);
+                    "and (f.question like %:keyword% or f.answer like %:keyword%)" +
+                    "order by c.ordering desc, f.ordering desc, f.createDate desc")
+    List<FaqInfo> findFaqInfosBy(String keyword);
 
 
     @Query(value = "select f from FaqInfo f join fetch f.faqCategory c " +

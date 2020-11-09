@@ -37,12 +37,12 @@ permitAllUrls:
 cloud:
   aws:
     credentials:
-      accessKey: AKIAIWF5WR4PHHJRWVHA
-      secretKey: 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
+      accessKey:
+      secretKey:
     s3:
-      bucket: toringcontent
+      bucket:
     region:
-      static: ap-northeast-2
+      static:
     stack:
       auto: false
 

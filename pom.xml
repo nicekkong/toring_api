@@ -56,7 +56,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <!-- Boot 실행시 "CLIENT_PLUGIN_AUTH is required"오류로 하위버전 사용 -->
-            <version>5.1.48</version>
+            <version>8.0.16</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
